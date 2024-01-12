@@ -62,4 +62,3 @@ class TimeStamped(models.Model):
     @property
     def is_edited(self):
         return self.created_at != self.updated_at
-
