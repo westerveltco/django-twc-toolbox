@@ -66,12 +66,5 @@ jobs:
         run: |
           hatch build
 
-      - if: ${{ github.event_name == 'workflow_dispatch' }}
-        name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-
-      - if: ${{ github.event_name != 'workflow_dispatch' }}
-        name: Publish to PyPI
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
