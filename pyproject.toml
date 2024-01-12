@@ -14,7 +14,7 @@ classifiers = [
   "Framework :: Django :: 4",
   "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
-  "License :: Other/Proprietary License",
+  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
