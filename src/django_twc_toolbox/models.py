@@ -47,7 +47,7 @@ class TimeStamped(models.Model):
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """
         Overriding the save method in order to make sure that
         modified field is updated even if it is not given as
@@ -59,6 +59,5 @@ class TimeStamped(models.Model):
 
         super().save(*args, **kwargs)
 
-    @property
-    def is_edited(self):
+    def is_edited(self) -> bool:
         return self.created_at != self.updated_at
