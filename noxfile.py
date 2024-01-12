@@ -38,6 +38,9 @@ def should_skip(python: str, django: str) -> tuple[bool, str | None]:
     if django == DJ32 and version(python) >= version(PY312):
         return True, f"Django {DJ32} requires Python < {PY312}"
 
+    if django == DJ50 and version(python) < version(PY310):
+        return True, f"Django {DJ50} requires Python {PY310}+"
+
     return False, None
 
 
