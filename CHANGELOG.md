@@ -16,6 +16,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 -->
 ## [Unreleased]
 
+## [0.1.0]
+
 Initial release!
 
 ### Added
@@ -29,4 +31,5 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/tree/HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/westerveltco/django-email-toolbox/releases/tag/v0.1.0
