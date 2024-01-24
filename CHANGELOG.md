@@ -16,6 +16,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 -->
 ## [Unreleased]
 
+### Added
+
+- `DatePaginator` and `DatePage` classes, extending Django's built-in `Paginator` and `Page` classes, respectively. These new classes enable pagination based on a specified date field, making it easier to work with date-based data. Useful for applications that require handling of time-series data or chronological records, such as a blog or an event archive.
+
 ## [0.1.1]
 
 Initial release!

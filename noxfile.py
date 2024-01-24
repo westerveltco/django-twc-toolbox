@@ -46,7 +46,11 @@ def should_skip(python: str, django: str) -> tuple[bool, str | None]:
 
 @nox.session
 def test(session):
-    session.notify(f"tests(python='{PY_DEFAULT}', django='{DJ_DEFAULT}')")
+    default_test = f"tests(python='{PY_DEFAULT}', django='{DJ_DEFAULT}')"
+    if session.posargs:
+        session.notify(default_test, posargs=session.posargs)
+    else:
+        session.notify(default_test)
     session.skip()
 
 
@@ -68,7 +72,10 @@ def tests(session, django):
     else:
         session.install(f"django=={django}")
 
-    session.run("python", "-m", "pytest")
+    if session.posargs:
+        session.run("python", "-m", "pytest", *session.posargs)
+    else:
+        session.run("python", "-m", "pytest")
 
 
 @nox.session

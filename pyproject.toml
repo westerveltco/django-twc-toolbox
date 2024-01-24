@@ -44,6 +44,7 @@ dev = [
   "faker",
   "hatch",
   "mypy",
+  "model-bakery",
   "nox",
   "pytest",
   "pytest-cov",
@@ -104,6 +105,14 @@ version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 source = ["src"]
 
 [tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if DEBUG:",
+  "if not DEBUG:",
+  "if settings.DEBUG:",
+  "if TYPE_CHECKING:",
+  'def __str__\(self\)\s?\-?\>?\s?\w*\:',
+]
 fail_under = 75
 
 [tool.coverage.run]
