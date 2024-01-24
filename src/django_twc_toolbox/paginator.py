@@ -34,13 +34,13 @@ class DatePaginator(Paginator):
         # Check if the object_list is empty.
         # Check for `exists()` first for performance, falling back in case it's
         # not a QuerySet.
-        if isinstance(self.object_list, QuerySet):
+        if isinstance(self.object_list, type(QuerySet)):
             if not self.object_list.exists():
                 return []
         elif not self.object_list:
             return []
 
-        if isinstance(self.object_list, QuerySet):
+        if isinstance(self.object_list, type(QuerySet)):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -104,7 +104,7 @@ class DatePaginator(Paginator):
         number = self.validate_number(number)
         start_date, end_date = self.date_segments[number - 1]
 
-        if isinstance(self.object_list, QuerySet):
+        if isinstance(self.object_list, type(QuerySet)):
             # For QuerySet, filter based on date range
             if self._is_chronological():
                 object_list = self.object_list.filter(
@@ -163,7 +163,7 @@ class DatePaginator(Paginator):
         if self.count == 1:
             return True
 
-        if isinstance(self.object_list, QuerySet):
+        if isinstance(self.object_list, type(QuerySet)):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -184,7 +184,7 @@ class DatePaginator(Paginator):
 
     def _check_object_list_is_ordered(self):
         """Ensure that the object_list is ordered by date_field"""
-        if isinstance(self.object_list, QuerySet):
+        if isinstance(self.object_list, type(QuerySet)):
             ordering_fields = self.object_list.query.order_by
             if not ordering_fields or not any(
                 field in [self.date_field, f"-{self.date_field}"]
