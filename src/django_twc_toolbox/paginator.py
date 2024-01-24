@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 
 from django.core.paginator import Page
 from django.core.paginator import Paginator
+from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django_stubs_ext import QuerySetAny
 
 if TYPE_CHECKING:
     from django.core.paginator import _SupportsPagination
@@ -34,13 +34,13 @@ class DatePaginator(Paginator):
         # Check if the object_list is empty.
         # Check for `exists()` first for performance, falling back in case it's
         # not a QuerySet.
-        if isinstance(self.object_list, QuerySetAny):
+        if isinstance(self.object_list, QuerySet):
             if not self.object_list.exists():
                 return []
         elif not self.object_list:
             return []
 
-        if isinstance(self.object_list, QuerySetAny):
+        if isinstance(self.object_list, QuerySet):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -104,7 +104,7 @@ class DatePaginator(Paginator):
         number = self.validate_number(number)
         start_date, end_date = self.date_segments[number - 1]
 
-        if isinstance(self.object_list, QuerySetAny):
+        if isinstance(self.object_list, QuerySet):
             # For QuerySet, filter based on date range
             if self._is_chronological():
                 object_list = self.object_list.filter(
@@ -163,7 +163,7 @@ class DatePaginator(Paginator):
         if self.count == 1:
             return True
 
-        if isinstance(self.object_list, QuerySetAny):
+        if isinstance(self.object_list, QuerySet):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -184,7 +184,7 @@ class DatePaginator(Paginator):
 
     def _check_object_list_is_ordered(self):
         """Ensure that the object_list is ordered by date_field"""
-        if isinstance(self.object_list, QuerySetAny):
+        if isinstance(self.object_list, QuerySet):
             ordering_fields = self.object_list.query.order_by
             if not ordering_fields or not any(
                 field in [self.date_field, f"-{self.date_field}"]
