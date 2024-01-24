@@ -16,6 +16,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 -->
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 
 - `DatePaginator` and `DatePage` classes, extending Django's built-in `Paginator` and `Page` classes, respectively. These new classes enable pagination based on a specified date field, making it easier to work with date-based data. Useful for applications that require handling of time-series data or chronological records, such as a blog or an event archive.
@@ -35,5 +37,6 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.1.1...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/westerveltco/django-email-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-email-toolbox/releases/tag/v0.1.1
