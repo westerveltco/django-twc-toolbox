@@ -18,7 +18,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Added
 
-- `DatePaginator` and `DatePage` classes, extending `django.core.paginiator.Paginator` to allow pagination by a date field.
+- `django_twc_toolbox.paginator.DatePaginator` and `django_twc_toolbox.paginator.DatePage` classes that extend `django.core.paginiator.Paginator` and `django.core.paginator.Page` respectively to allow pagination by a date field.
 
 ## [0.1.1]
 
