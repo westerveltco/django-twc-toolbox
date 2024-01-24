@@ -26,7 +26,9 @@ def pytest_configure(config):
         },
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
         INSTALLED_APPS=[
+            "django.contrib.contenttypes",
             "django_twc_toolbox",
+            "tests.dummy",
         ],
         LOGGING_CONFIG=None,
         PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"],

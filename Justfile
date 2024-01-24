@@ -7,6 +7,8 @@ set dotenv-load := true
 #  DEPENDENCIES  #
 ##################
 
+alias install := bootstrap
+
 bootstrap:
     python -m pip install --editable '.[dev]'
 
