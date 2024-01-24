@@ -176,7 +176,7 @@ class TestDatePaginator:
         first_segment_start, first_segment_end = paginator.date_segments[0]
 
         # Count objects in the first segment based on the type of 'objects'
-        if isinstance(objects, type(QuerySet)):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
             objects_in_first_segment = objects.filter(
                 date__gte=first_segment_start,
                 date__lt=first_segment_end,
@@ -231,7 +231,7 @@ class TestDatePaginator:
         assert paginator.num_pages == len(objects)
 
     def test_date_range_boundary_cases(self, db, objects):
-        if isinstance(objects, type(QuerySet)):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
             earliest_date = objects.earliest("date").date
         else:
             earliest_date = min(entry.date for entry in objects)
@@ -248,7 +248,7 @@ class TestDatePaginator:
         )
 
         # If 'objects' is a tuple/list, manually add these new objects to it
-        if isinstance(objects, type(QuerySet)):
+        if not isinstance(objects, QuerySet):  # type: ignore[misc]
             if isinstance(objects, tuple):
                 objects = objects + tuple(new_objects)
             else:
@@ -259,7 +259,7 @@ class TestDatePaginator:
         assert all(obj.date >= boundary_date for obj in first_page.object_list)
 
     def test_non_sequence_page_number(self, objects):
-        if isinstance(objects, type(QuerySet)):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
             random_objects = objects.order_by("?")
         else:
             random_objects = list(objects)
@@ -300,7 +300,7 @@ class TestDatePaginator:
         indirect=["model_data_queryset"],
     )
     def test_reversed_ordering(self, objects):
-        if isinstance(objects, type(QuerySet)):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
             objects = objects.order_by("-date")
         else:
             objects = list(reversed(objects))
@@ -396,7 +396,7 @@ class TestDatePaginator:
         assert paginator.count == len(objects)
 
         # Check num_pages
-        if isinstance(objects, type(QuerySet)):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
             earliest_date = objects.earliest("date").date
             latest_date = objects.latest("date").date
         else:
