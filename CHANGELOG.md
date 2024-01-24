@@ -16,6 +16,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 -->
 ## [Unreleased]
 
+### Added
+
+- `DatePaginator` and `DatePage` classes, extending `django.core.paginiator.Paginator` to allow pagination by a date field.
+
 ## [0.1.1]
 
 Initial release!
