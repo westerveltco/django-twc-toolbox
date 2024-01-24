@@ -23,11 +23,11 @@ update:
 #  TESTING/TYPES #
 ##################
 
-test:
-    python -m nox --reuse-existing-virtualenvs --session "test"
+test *ARGS:
+    python -m nox --reuse-existing-virtualenvs --session "test" -- "{{ ARGS }}"
 
-test-all:
-    python -m nox --reuse-existing-virtualenvs --session "tests"
+test-all *ARGS:
+    python -m nox --reuse-existing-virtualenvs --session "tests" -- "{{ ARGS }}"
 
 coverage:
     python -m nox --reuse-existing-virtualenvs --session "coverage"
