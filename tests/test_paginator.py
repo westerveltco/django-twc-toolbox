@@ -4,13 +4,15 @@ import datetime
 import itertools
 import math
 import random
+from dataclasses import asdict
+from dataclasses import dataclass
 
 import pytest
 from django.core.paginator import EmptyPage
 from django.core.paginator import Page
 from django.core.paginator import PageNotAnInteger
+from django.db.models.query import QuerySet
 from django.utils import timezone
-from django_stubs_ext import QuerySetAny
 from model_bakery import baker
 
 from django_twc_toolbox.paginator import DatePaginator
@@ -19,55 +21,153 @@ from .dummy.models import DateOrderableModel
 from .dummy.models import DateTimeOrderableModel
 
 
-@pytest.fixture(params=[DateOrderableModel, DateTimeOrderableModel])
-def model_class(request):
-    return request.param
+@dataclass
+class ModelClassParams:
+    """
+    Stores parameters for a pytest parameterized test case.
+
+    Intended to be used as a parameter to a parameterized test case along
+    with the indirect `model_data_queryset` fixture.
+    """
+
+    model_class: type[DateOrderableModel | DateTimeOrderableModel]
+    number_of_days: int
+
+    def __iter__(self):
+        return iter(asdict(self).values())
+
+    @classmethod
+    def from_request(cls, request):
+        return cls(
+            model_class=request.param.model_class,
+            number_of_days=request.param.number_of_days,
+        )
 
 
-@pytest.fixture(params=["queryset", "list", "tuple"])
-def objects(request, model_class, db):
-    NUMBER_OF_DAYS = 90
+@pytest.fixture
+def model_data_queryset(request, db):
+    """
+    Sets up a queryset of the specified model class with the specified number of days of data
+    for use in pagination tests.
+
+    Depending on the test parameterization, it uses `ModelClassParams` to determine the model class
+    and the number of days for data generation. If not parameterized with `ModelClassParams`,
+    it defaults to `DateOrderableModel` with 90 days of data.
+
+    The fixture supports creating data for both `DateOrderableModel` and `DateTimeOrderableModel`.
+    For `DateTimeOrderableModel`, it generates two data points per day.
+
+    The DatePaginator expects an ordered data structure, so the data is returned ordered to make
+    all the tests do not need to worry about the initial ordering. In the tests that need to verify
+    the ordering, they can apply their own sorting to the data.
+    """
+    # Check if the request has the expected parameterization
+    if hasattr(request, "param") and isinstance(request.param, ModelClassParams):
+        model_class, number_of_days = ModelClassParams.from_request(request)
+    else:
+        # Default values for tests that don't use ModelClassParams
+        model_class = DateOrderableModel  # or any default model
+        number_of_days = 90  # default number of days
 
     if model_class == DateOrderableModel:
-        baker.make(
-            "dummy.DateOrderableModel",
-            date=itertools.cycle(
-                timezone.now() - datetime.timedelta(days=i)
-                for i in range(NUMBER_OF_DAYS)
-            ),
-            _quantity=NUMBER_OF_DAYS,
+        date_values = (
+            timezone.now() - datetime.timedelta(days=i) for i in range(number_of_days)
         )
-        queryset = DateOrderableModel.objects.all().order_by("date")
     else:
         current_time = timezone.now()
-        datetime_values = itertools.chain.from_iterable(
+        date_values = itertools.chain.from_iterable(
             (
                 current_time - datetime.timedelta(days=i, hours=12),
                 current_time - datetime.timedelta(days=i),
             )
-            for i in range(NUMBER_OF_DAYS)
+            for i in range(number_of_days)
         )
-        baker.make(
-            "dummy.DateTimeOrderableModel",
-            date=itertools.cycle(datetime_values),
-            _quantity=NUMBER_OF_DAYS,
-        )
-        queryset = DateTimeOrderableModel.objects.all().order_by("date")
 
+    baker.make(
+        model_class,
+        date=itertools.cycle(date_values),
+        _quantity=number_of_days,
+    )
+
+    return model_class.objects.all().order_by("date")
+
+
+@pytest.fixture(params=["queryset", "list", "tuple"])
+def objects(request, model_data_queryset):
+    """
+    Provides the model data needed in different formats to make sure our custom
+    DatePaginator can handle all the data structures a Django Paginator should handle.
+
+    It uses the `model_data_queryset` fixture to get the initial queryset and then
+    provides it in three different structures: QuerySet, list, and tuple.
+    """
     if request.param == "queryset":
-        ret = queryset
+        ret = model_data_queryset
     elif request.param == "tuple":
-        ret = tuple(queryset)
+        ret = tuple(model_data_queryset)
     else:
-        ret = list(queryset)
+        ret = list(model_data_queryset)
 
     return ret
 
 
 class TestDatePaginator:
-    def test_monthly(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=30))
-        assert paginator.num_pages == 3
+    @pytest.mark.parametrize(
+        "model_data_queryset,days_per_page,expected_num_pages",
+        [
+            # date
+            # create 90 days of data, paginate by 30 days, expect 3 pages
+            (
+                ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+                30,
+                3,
+            ),
+            # datetime
+            # create 90 days of data (2 per day), paginate by 30 days, expect 2 pages
+            (
+                ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=90),
+                30,
+                2,
+            ),
+            # date
+            # create 180 days of data, paginate by 30 days, expect 6 pages
+            (
+                ModelClassParams(model_class=DateOrderableModel, number_of_days=180),
+                30,
+                6,
+            ),
+            # datetime
+            # create 180 days of data (2 per day), paginate by 30 days, expect 3 pages
+            (
+                ModelClassParams(
+                    model_class=DateTimeOrderableModel, number_of_days=180
+                ),
+                30,
+                3,
+            ),
+            # date
+            # create 90 days of data, paginate by 60 days, expect 2 pages
+            (
+                ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+                60,
+                2,
+            ),
+            # date
+            # create 90 days of data (2 per day), paginate by 60 days, expect 1 page
+            (
+                ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=90),
+                60,
+                1,
+            ),
+        ],
+        indirect=["model_data_queryset"],
+    )
+    def test_num_pages(self, objects, days_per_page, expected_num_pages):
+        paginator = DatePaginator(
+            objects, "date", datetime.timedelta(days=days_per_page)
+        )
+
+        assert paginator.num_pages == expected_num_pages
 
     def test_first_page(self, objects):
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=30))
@@ -76,7 +176,7 @@ class TestDatePaginator:
         first_segment_start, first_segment_end = paginator.date_segments[0]
 
         # Count objects in the first segment based on the type of 'objects'
-        if isinstance(objects, QuerySetAny):
+        if isinstance(objects, QuerySet):
             objects_in_first_segment = objects.filter(
                 date__gte=first_segment_start,
                 date__lt=first_segment_end,
@@ -131,7 +231,7 @@ class TestDatePaginator:
         assert paginator.num_pages == len(objects)
 
     def test_date_range_boundary_cases(self, db, objects):
-        if isinstance(objects, QuerySetAny):
+        if isinstance(objects, QuerySet):
             earliest_date = objects.earliest("date").date
         else:
             earliest_date = min(entry.date for entry in objects)
@@ -148,7 +248,7 @@ class TestDatePaginator:
         )
 
         # If 'objects' is a tuple/list, manually add these new objects to it
-        if not isinstance(objects, QuerySetAny):
+        if not isinstance(objects, QuerySet):
             if isinstance(objects, tuple):
                 objects = objects + tuple(new_objects)
             else:
@@ -159,7 +259,7 @@ class TestDatePaginator:
         assert all(obj.date >= boundary_date for obj in first_page.object_list)
 
     def test_non_sequence_page_number(self, objects):
-        if isinstance(objects, QuerySetAny):
+        if isinstance(objects, QuerySet):
             random_objects = objects.order_by("?")
         else:
             random_objects = list(objects)
@@ -170,7 +270,14 @@ class TestDatePaginator:
         with pytest.raises(ValueError):
             DatePaginator(random_objects, "date", datetime.timedelta(days=30))
 
-    #
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
     def test_chronological_ordering(self, objects):
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=30))
 
@@ -184,8 +291,16 @@ class TestDatePaginator:
         for item in paginator.page(1).object_list:
             assert item.date >= first_page_item_date
 
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
     def test_reversed_ordering(self, objects):
-        if isinstance(objects, QuerySetAny):
+        if isinstance(objects, QuerySet):
             objects = objects.order_by("-date")
         else:
             objects = list(reversed(objects))
@@ -262,6 +377,14 @@ class TestDatePaginator:
             for item in elided_range_list
         )
 
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
     def test_paginator_attributes(self, objects):
         date_range = datetime.timedelta(days=10)
         paginator = DatePaginator(objects, "date", date_range)
@@ -273,7 +396,7 @@ class TestDatePaginator:
         assert paginator.count == len(objects)
 
         # Check num_pages
-        if isinstance(objects, QuerySetAny):
+        if isinstance(objects, QuerySet):
             earliest_date = objects.earliest("date").date
             latest_date = objects.latest("date").date
         else:
