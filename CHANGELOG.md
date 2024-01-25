@@ -16,6 +16,11 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 -->
 ## [Unreleased]
 
+### Fixed
+
+- `DatePage.min_date` and `DatePage.max_date` now return the correct dates for the page. `DatePage.min_date` returns the oldest date and `DatePage.max_date` returns the newest date.
+- `DatePage.date_range` now returns the correct range of dates for the page.
+
 ## [0.2.0]
 
 ### Added

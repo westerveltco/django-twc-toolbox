@@ -415,7 +415,18 @@ class TestDatePaginator:
 
 
 class TestDatePage:
-    def test_page_start_date(self, objects):
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_start_date(self, objects, order_by):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            objects = objects.order_by(order_by)
+        elif order_by == "date":
+            objects = list(objects)
+        else:
+            objects = list(reversed(objects))
+
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
         page = paginator.page(1)
 
@@ -423,7 +434,33 @@ class TestDatePage:
 
         assert page.start_date == start_date
 
-    def test_page_end_date(self, objects):
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_start_date_single_entry(self, db, order_by):
+        baker.make("dummy.DateOrderableModel", date=timezone.now().date())
+        obj = DateOrderableModel.objects.all().order_by(order_by)
+
+        paginator = DatePaginator(obj, "date", datetime.timedelta(days=10))
+        page = paginator.page(1)
+
+        start_date, _ = paginator.date_segments[0]
+
+        assert page.start_date == start_date
+
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_end_date(self, objects, order_by):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            objects = objects.order_by(order_by)
+        elif order_by == "date":
+            objects = list(objects)
+        else:
+            objects = list(reversed(objects))
+
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
         page = paginator.page(1)
 
@@ -431,32 +468,101 @@ class TestDatePage:
 
         assert page.end_date == end_date
 
-    def test_page_min_date(self, objects):
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_end_date_single_entry(self, db, order_by):
+        baker.make("dummy.DateOrderableModel", date=timezone.now().date())
+        obj = DateOrderableModel.objects.all().order_by(order_by)
+
+        paginator = DatePaginator(obj, "date", datetime.timedelta(days=10))
+        page = paginator.page(1)
+
+        _, end_date = paginator.date_segments[0]
+
+        assert page.end_date == end_date
+
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_min_date(self, objects, order_by):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            objects = objects.order_by(order_by)
+        elif order_by == "date":
+            objects = list(objects)
+        else:
+            objects = list(reversed(objects))
+
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
         page = paginator.page(1)
 
-        start_date, _ = paginator.date_segments[0]
+        start_date, end_date = paginator.date_segments[0]
 
-        assert page.min_date == start_date
+        print("page", page)
+        print("paginator.date_segments", paginator.date_segments)
+        print("paginator.date_segments[0]", paginator.date_segments[0])
+        print("page.min_date", page.start_date)
+        print("start_date", start_date)
 
-    def test_page_max_date(self, objects):
+        if order_by == "date":
+            assert page.min_date == start_date
+        else:
+            assert page.min_date == end_date
+
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_max_date(self, objects, order_by):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            objects = objects.order_by(order_by)
+        elif order_by == "date":
+            objects = list(objects)
+        else:
+            objects = list(reversed(objects))
+
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
         page = paginator.page(1)
 
-        assert page.max_date.date() == timezone.now().date()
+        start_date, end_date = paginator.date_segments[0]
+
+        if order_by == "date":
+            assert page.max_date == end_date
+        else:
+            assert page.max_date == start_date
 
         page = paginator.page(2)
 
-        _, end_date = paginator.date_segments[1]
-        assert page.max_date == end_date
+        start_date, end_date = paginator.date_segments[1]
 
-    def test_page_date_range(self, objects):
+        if order_by == "date":
+            assert page.max_date == end_date
+        else:
+            assert page.max_date == start_date
+
+    @pytest.mark.parametrize(
+        "order_by",
+        ["date", "-date"],
+    )
+    def test_page_date_range(self, objects, order_by):
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            objects = objects.order_by(order_by)
+        elif order_by == "date":
+            objects = list(objects)
+        else:
+            objects = list(reversed(objects))
+
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
         page = paginator.page(1)
 
-        start_date, _ = paginator.date_segments[0]
+        start_date, end_date = paginator.date_segments[0]
 
-        assert page.date_range == (start_date, page.max_date)
+        if order_by == "date":
+            assert page.date_range == (start_date, end_date)
+        else:
+            assert page.date_range == (end_date, start_date)
 
     def test_page_has_next(self, objects):
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
