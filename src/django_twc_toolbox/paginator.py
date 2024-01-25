@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 from django.core.paginator import Page
 from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
-from django.utils import timezone
 from django.utils.functional import cached_property
 
 if TYPE_CHECKING:
@@ -229,6 +228,6 @@ class DatePage(Page):
         super().__init__(object_list, number, paginator)
         self.start_date = start_date
         self.end_date = end_date
-        self.min_date = self.start_date
-        self.max_date = self.end_date if number != 1 else timezone.now()
-        self.date_range = (self.start_date, self.max_date)
+        self.min_date = min([start_date, end_date])
+        self.max_date = max([start_date, end_date])
+        self.date_range = (self.min_date, self.max_date)
