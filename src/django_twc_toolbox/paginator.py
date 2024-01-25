@@ -58,15 +58,16 @@ class DatePaginator(Paginator):
             # if chronological, we are moving forward in time through the `object_list`
             # so any time we need to get the next segment's end date, we need to
             # add the date_range. to start we add the date_range to the first date.
+            # basically any time we need to get the next segment or move the date
+            # goalpost, we use addition
             current_end_date = first_date + self.date_range
             # less than or equal because we are moving forwards in time and dates
             # in the future are greater than dates in the past
             # yesterday < today < tomorrow
             while current_end_date <= last_date:
-                # keep the tuple ordering consistent with the chronological order
-                # so start_date < end_date
                 segments.append((current_start_date, current_end_date))
                 current_start_date = current_end_date
+                # add because we are moving forwards in time
                 current_end_date += self.date_range
             # Append the last segment to cover any remaining dates not included in the
             # previous segments. This is necessary because the date range defined by
@@ -81,21 +82,19 @@ class DatePaginator(Paginator):
             # if not chronological, it means we are moving backwards in time through
             # the `object_list` so this time we subtract the date_range to get the
             # next segment's end date. to start we subtract the date_range from the
-            # first date.
+            # first date. opposite to above, any time we need to get the next segment
+            # or move the date goalpost, we use subtraction
             current_end_date = first_date - self.date_range
-            # again, greater than or equal because we are moving backwards in time
+            # greater than or equal because we are moving backwards in time
             # tomorrow > today > yesterday
             while current_end_date >= last_date:
-                # keep the tuple ordering consistent with the reverse chronological
-                # order so end_date > start_date
-                # segments.append((current_end_date, current_start_date))
                 segments.append((current_start_date, current_end_date))
                 current_start_date = current_end_date
+                # subtract because we are moving backwards in time
                 current_end_date -= self.date_range
-            # subtract because reverse
-            # segments.append(
-            #     (last_date - datetime.timedelta(days=1), current_start_date)
-            # )
+
+            # Append the last segment to cover the remaining dates, similar to above.
+            # We subtract one day from `last_date` to ensure the entire day is covered.
             segments.append(
                 (current_start_date, last_date - datetime.timedelta(days=1))
             )
