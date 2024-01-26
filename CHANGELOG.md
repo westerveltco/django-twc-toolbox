@@ -7,14 +7,27 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 <!--
 ## [version]
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
+### Added - for new features
+### Changed - for changes in existing functionality
+### Deprecated - for soon-to-be removed features
+### Removed - for now removed features
+### Fixed - for any bug fixes
+### Security - in case of vulnerabilities
 -->
 ## [Unreleased]
+
+### Added
+
+- Added the `page_date_range` argument to the `DatePaginator`, taking the place of the existing `date_range` argument. This change clarifies that it represents constraining the range of dates for each page, not the entire range of dates for the paginator.
+
+### Changed
+
+- Updated the `DatePaginator` class to use the `page_date_range` argument instead of the deprecated `date_range` argument.
+- `DatePage.min_date`, `DatePage.max_date`, and `DatePage.date_range` are now `cached_property` attributes instead of being set in the `__init__` method.
+
+### Deprecated
+
+- The `date_range` argument of the `DatePaginator` class is now deprecated. It will be removed in version 0.4.0.
 
 ## [0.2.1]
 
