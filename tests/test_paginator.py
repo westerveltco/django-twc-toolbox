@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import datetime
 import itertools
-import math
 import random
 from dataclasses import asdict
 from dataclasses import dataclass
 
 import pytest
+from django import VERSION as DJANGO_VERSION
 from django.core.paginator import EmptyPage
 from django.core.paginator import Page
 from django.core.paginator import PageNotAnInteger
@@ -15,6 +15,7 @@ from django.db.models.query import QuerySet
 from django.utils import timezone
 from model_bakery import baker
 
+from django_twc_toolbox.paginator import DatePage
 from django_twc_toolbox.paginator import DatePaginator
 
 from .dummy.models import DateOrderableModel
@@ -320,34 +321,6 @@ class TestDatePaginator:
             assert item.date <= previous_item
             previous_item = item.date
 
-    def test_paginator_init(self, objects):
-        paginator = DatePaginator(
-            objects,
-            "date",
-            datetime.timedelta(days=10),
-            orphans=5,
-            allow_empty_first_page=False,
-        )
-
-        assert paginator.object_list == objects
-        assert paginator.per_page == 1  # As it paginates by date
-        assert paginator.orphans == 5
-        assert paginator.allow_empty_first_page is False
-
-    def test_paginator_get_page(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-
-        # Valid page number
-        page = paginator.get_page(1)
-
-        assert isinstance(page, Page)
-        assert page.number == 1
-
-        # Invalid page number
-        invalid_page = paginator.get_page(1000)
-
-        assert invalid_page.number == paginator.num_pages  # Should return the last page
-
     def test_paginator_page_function(self, objects):
         paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
 
@@ -364,54 +337,6 @@ class TestDatePaginator:
 
         with pytest.raises(EmptyPage):
             paginator.page(paginator.num_pages + 1)  # Page number out of range
-
-    def test_paginator_get_elided_page_range(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-
-        elided_range = paginator.get_elided_page_range(number=1)
-        elided_range_list = list(elided_range)  # Convert generator to list
-
-        # The list should contain integers representing page numbers and possibly the ELLIPSIS
-        assert all(
-            isinstance(item, int) or item == paginator.ELLIPSIS
-            for item in elided_range_list
-        )
-
-    @pytest.mark.parametrize(
-        "model_data_queryset",
-        [
-            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
-            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
-        ],
-        indirect=["model_data_queryset"],
-    )
-    def test_paginator_attributes(self, objects):
-        date_range = datetime.timedelta(days=10)
-        paginator = DatePaginator(objects, "date", date_range)
-
-        # Check ELLIPSIS
-        assert paginator.ELLIPSIS == "…"
-
-        # Check count
-        assert paginator.count == len(objects)
-
-        # Check num_pages
-        if isinstance(objects, QuerySet):  # type: ignore[misc]
-            earliest_date = objects.earliest("date").date
-            latest_date = objects.latest("date").date
-        else:
-            dates = [entry.date for entry in objects]
-            earliest_date = min(dates)
-            latest_date = max(dates)
-
-        date_span = (latest_date - earliest_date).days + 1  # +1 to include the last day
-        expected_num_pages = math.ceil(date_span / date_range.days)
-
-        assert paginator.num_pages == expected_num_pages
-
-        # Check page_range
-        assert isinstance(paginator.page_range, range)
-        assert len(paginator.page_range) == paginator.num_pages
 
     @pytest.mark.parametrize(
         "model_data_queryset",
@@ -467,6 +392,131 @@ class TestDatePaginator:
 
         with pytest.warns(DeprecationWarning):
             DatePaginator(objects, "date", date_range=date_range)
+
+
+class TestDatePaginatorInheritance:
+    """
+    Test that the DatePaginator respects the Django Paginator inheritance.
+
+    Only test the attributes and methods that are not overridden.
+    """
+
+    @pytest.fixture
+    def paginator(self, objects):
+        return DatePaginator(objects, "date", datetime.timedelta(days=10))
+
+    def test___init__(self, objects):
+        paginator = DatePaginator(
+            objects,
+            "date",
+            datetime.timedelta(days=10),
+            allow_empty_first_page=False,
+        )
+
+        assert paginator.object_list == objects
+        assert paginator.per_page == 1  # As it paginates by date
+        assert paginator.allow_empty_first_page is False
+        if DJANGO_VERSION >= (5, 0, 0):
+            assert paginator.error_messages == paginator.default_error_messages
+
+    def test_allow_empty_first_page(self):
+        allow_paginator = DatePaginator(
+            DateOrderableModel.objects.none().order_by("date"),
+            "date",
+            datetime.timedelta(days=10),
+            allow_empty_first_page=True,
+        )
+
+        assert allow_paginator.num_pages == 0
+
+        do_not_allow_paginator = DatePaginator(
+            DateOrderableModel.objects.none().order_by("date"),
+            "date",
+            datetime.timedelta(days=10),
+            allow_empty_first_page=False,
+        )
+
+        assert do_not_allow_paginator.num_pages == 0
+        with pytest.raises(EmptyPage):
+            do_not_allow_paginator.page(1)
+
+    @pytest.mark.skipif(
+        DJANGO_VERSION < (5, 0, 0),
+        reason="`error_messages` kwarg introduced in Django 5.0",
+    )
+    def test_error_messages(self, objects):
+        custom_error_messages = {
+            "invalid_page": "Custom invalid page message",
+            "min_page": "Custom min page message",
+            "no_results": "Custom no results message",
+        }
+
+        paginator = DatePaginator(
+            objects,
+            "date",
+            datetime.timedelta(days=10),
+            error_messages=custom_error_messages,
+        )
+
+        with pytest.raises(PageNotAnInteger) as excinfo:
+            paginator.page("invalid")
+        assert str(excinfo.value) == custom_error_messages["invalid_page"]
+
+        with pytest.raises(EmptyPage) as excinfo:
+            paginator.page(0)
+        assert str(excinfo.value) == custom_error_messages["min_page"]
+
+        with pytest.raises(EmptyPage) as excinfo:
+            paginator.page(1000)
+        assert str(excinfo.value) == custom_error_messages["no_results"]
+
+    def test___iter__(self, paginator):
+        for index, page in enumerate(paginator):
+            assert page.number == index + 1
+
+    def test_validate_number(self, paginator):
+        assert paginator.validate_number(1) == 1
+
+        with pytest.raises(PageNotAnInteger):
+            paginator.validate_number("two")
+
+        with pytest.raises(EmptyPage):
+            paginator.validate_number(-1)
+
+        with pytest.raises(EmptyPage):
+            paginator.validate_number(paginator.num_pages + 1)
+
+    def test_get_page(self, paginator):
+        page = paginator.get_page(1)
+
+        assert isinstance(page, Page)
+        assert page.number == 1
+
+        # Invalid page number
+        invalid_page = paginator.get_page(1000)
+
+        assert invalid_page.number == paginator.num_pages  # Should return the last page
+
+    def test_count(self, objects):
+        paginator = DatePaginator(
+            objects,
+            "date",
+            datetime.timedelta(days=10),
+        )
+
+        assert paginator.count == len(objects)
+
+    def test_page_range(self, paginator):
+        assert len(paginator.page_range) == paginator.num_pages
+
+    def test_get_elided_page_range(self, paginator):
+        elided_range = paginator.get_elided_page_range(number=1)
+        elided_range_list = list(elided_range)
+
+        assert all(
+            isinstance(item, int) or item == paginator.ELLIPSIS
+            for item in elided_range_list
+        )
 
 
 class TestDatePage:
@@ -555,12 +605,6 @@ class TestDatePage:
 
         start_date, end_date = paginator.date_segments[0]
 
-        print("page", page)
-        print("paginator.date_segments", paginator.date_segments)
-        print("paginator.date_segments[0]", paginator.date_segments[0])
-        print("page.min_date", page.start_date)
-        print("start_date", start_date)
-
         if order_by == "date":
             assert page.min_date == start_date
         else:
@@ -619,72 +663,244 @@ class TestDatePage:
         else:
             assert page.date_range == (end_date, start_date)
 
-    def test_page_has_next(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
+
+class TestDatePageInheritence:
+    """
+    Test that the DatePage respects the Django Page inheritance.
+
+    Only test the attributes and methods that are not overridden.
+    """
+
+    @pytest.fixture
+    def paginator(self, objects):
+        return DatePaginator(objects, "date", datetime.timedelta(days=10))
+
+    def test___init__(self, paginator):
         page = paginator.page(1)
+        start_date, end_date = paginator.date_segments[0]
 
-        has_next = page.number < paginator.num_pages
-
-        assert page.has_next() == has_next
-
-    def test_page_has_previous(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
-
-        has_previous = page.number > 1
-
-        assert page.has_previous() == has_previous
-
-    def test_page_has_other_pages(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
-
-        has_other_pages = paginator.num_pages > 1
-
-        assert page.has_other_pages() == has_other_pages
-
-    def test_page_next_page_number(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
-
-        assert page.next_page_number() == page.number + 1
-
-        page = paginator.page(paginator.num_pages)  # Last page
-
-        with pytest.raises(EmptyPage):
-            page.next_page_number()
-
-    def test_page_previous_page_number(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(paginator.num_pages)  # Last page
-
-        assert page.previous_page_number() == page.number - 1
-
-        page = paginator.page(1)
-
-        with pytest.raises(EmptyPage):
-            page.previous_page_number()
-
-    def test_page_start_index(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
-
-        assert page.start_index() == (page.number - 1) * page.paginator.per_page + 1
-
-    def test_page_end_index(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
-
-        assert page.end_index() == min(
-            page.number * page.paginator.per_page, page.paginator.count
+        date_page = DatePage(
+            page.object_list, page.number, paginator, start_date, end_date
         )
 
-    def test_page_attributes(self, objects):
-        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
-        page = paginator.page(1)
+        assert date_page.object_list == page.object_list
+        assert date_page.number == page.number
+        assert date_page.paginator == page.paginator
 
-        assert hasattr(page.object_list, "__len__") or hasattr(
-            page.object_list, "count"
+    def test___len__(self, paginator):
+        page = paginator.page(1)
+        start_date, end_date = paginator.date_segments[0]
+
+        date_page = DatePage(
+            page.object_list, page.number, paginator, start_date, end_date
         )
-        assert page.number == 1
-        assert page.paginator == paginator
+
+        assert len(date_page) == len(page.object_list)
+
+    def test___getitem__(self, paginator):
+        page = paginator.page(1)
+        start_date, end_date = paginator.date_segments[0]
+
+        date_page = DatePage(
+            page.object_list, page.number, paginator, start_date, end_date
+        )
+
+        assert date_page[0] == page.object_list[0]
+        assert date_page[:2] == page.object_list[:2]
+        with pytest.raises(IndexError):
+            date_page[len(page.object_list)]
+
+    def test_has_next(self, paginator):
+        last_page_number = paginator.num_pages
+        last_start_date, last_end_date = paginator.date_segments[last_page_number - 1]
+
+        last_page = DatePage(
+            paginator.page(last_page_number).object_list,
+            last_page_number,
+            paginator,
+            last_start_date,
+            last_end_date,
+        )
+
+        assert not last_page.has_next()
+
+        second_last_page_number = last_page_number - 1
+        second_last_start_date, second_last_end_date = paginator.date_segments[
+            second_last_page_number - 1
+        ]
+
+        second_last_page = DatePage(
+            paginator.page(second_last_page_number).object_list,
+            second_last_page_number,
+            paginator,
+            second_last_start_date,
+            second_last_end_date,
+        )
+
+        assert second_last_page.has_next()
+
+    def test_has_previous(self, paginator):
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        assert not first_page.has_previous()
+
+        second_start_date, second_end_date = paginator.date_segments[1]
+
+        second_page = DatePage(
+            paginator.page(2).object_list,
+            2,
+            paginator,
+            second_start_date,
+            second_end_date,
+        )
+
+        assert second_page.has_previous()
+
+    def test_has_other_pages(self, objects, paginator):
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        assert first_page.has_other_pages()
+
+        single_paginator = DatePaginator(
+            objects, "date", datetime.timedelta(days=len(objects) + 1)
+        )
+        single_start_date, single_end_date = single_paginator.date_segments[0]
+
+        single_page = DatePage(
+            single_paginator.page(1).object_list,
+            1,
+            single_paginator,
+            single_start_date,
+            single_end_date,
+        )
+
+        assert not single_page.has_other_pages()
+
+    def test_next_page_number(self, paginator):
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        assert first_page.next_page_number() == 2
+
+        last_page_number = paginator.num_pages
+        last_start_date, last_end_date = paginator.date_segments[last_page_number - 1]
+
+        last_page = DatePage(
+            paginator.page(last_page_number).object_list,
+            last_page_number,
+            paginator,
+            last_start_date,
+            last_end_date,
+        )
+
+        with pytest.raises(EmptyPage):
+            last_page.next_page_number()
+
+    def test_previous_page_number(self, paginator):
+        last_page_number = paginator.num_pages
+        last_start_date, last_end_date = paginator.date_segments[last_page_number - 1]
+
+        last_page = DatePage(
+            paginator.page(last_page_number).object_list,
+            last_page_number,
+            paginator,
+            last_start_date,
+            last_end_date,
+        )
+
+        assert last_page.previous_page_number() == last_page_number - 1
+
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        with pytest.raises(EmptyPage):
+            first_page.previous_page_number()
+
+    def test_start_index(self, paginator):
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        assert first_page.start_index() == 1
+
+        middle_page_number = paginator.num_pages // 2
+        middle_start_date, middle_end_date = paginator.date_segments[
+            middle_page_number - 1
+        ]
+
+        middle_page = DatePage(
+            paginator.page(middle_page_number).object_list,
+            middle_page_number,
+            paginator,
+            middle_start_date,
+            middle_end_date,
+        )
+
+        assert (
+            middle_page.start_index()
+            == (middle_page_number - 1) * paginator.per_page + 1
+        )
+
+    def test_end_index(self, paginator):
+        first_start_date, first_end_date = paginator.date_segments[0]
+
+        first_page = DatePage(
+            paginator.page(1).object_list,
+            1,
+            paginator,
+            first_start_date,
+            first_end_date,
+        )
+
+        assert first_page.end_index() == min(
+            first_page.number * paginator.per_page, paginator.count
+        )
+
+        last_page_number = paginator.num_pages
+        last_start_date, last_end_date = paginator.date_segments[last_page_number - 1]
+
+        last_page = DatePage(
+            paginator.page(last_page_number).object_list,
+            last_page_number,
+            paginator,
+            last_start_date,
+            last_end_date,
+        )
+
+        assert last_page.end_index() == paginator.count
