@@ -29,7 +29,7 @@ class DatePaginator(Paginator):
         if date_range and not page_date_range:
             warnings.warn(
                 "The `date_range` argument is deprecated in favor of `page_date_range` "
-                "and will be removed in v0.3.0.",
+                "and will be removed in v0.4.0.",
                 DeprecationWarning,
                 stacklevel=2,
             )
