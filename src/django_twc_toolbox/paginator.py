@@ -84,7 +84,7 @@ class DatePaginator(Paginator):
 
         segments = []
         current_start_date = first_date
-        if self._is_chronological():
+        if self.chronological:
             # if chronological, we are moving forward in time through the `object_list`
             # so any time we need to get the next segment's end date, we need to
             # add the date_range. to start we add the date_range to the first date.
@@ -146,7 +146,7 @@ class DatePaginator(Paginator):
         object_list: QuerySet[Any] | list[Any]
 
         if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
-            if self._is_chronological():
+            if self.chronological:
                 filter_kwargs = {
                     f"{self.date_field}__gte": start_date,
                     f"{self.date_field}__lt": end_date,
@@ -161,7 +161,7 @@ class DatePaginator(Paginator):
 
             object_list = self.object_list.filter(**filter_kwargs).order_by(order_by)
         else:
-            if self._is_chronological():
+            if self.chronological:
                 object_list = [
                     obj
                     for obj in self.object_list
@@ -178,12 +178,13 @@ class DatePaginator(Paginator):
 
             object_list.sort(
                 key=lambda obj: getattr(obj, self.date_field),
-                reverse=not self._is_chronological(),
+                reverse=not self.chronological,
             )
 
         return object_list
 
-    def _is_chronological(self) -> bool:
+    @cached_property
+    def chronological(self) -> bool:
         """Check if the object_list is ordered in chronological order
 
         Chronological
