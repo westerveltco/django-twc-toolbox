@@ -151,15 +151,13 @@ class DatePaginator(Paginator):
                     f"{self.date_field}__gte": start_date,
                     f"{self.date_field}__lt": end_date,
                 }
-                order_by = f"{self.date_field}"
             else:
                 filter_kwargs = {
                     f"{self.date_field}__lte": start_date,
                     f"{self.date_field}__gt": end_date,
                 }
-                order_by = f"-{self.date_field}"
 
-            object_list = self.object_list.filter(**filter_kwargs).order_by(order_by)
+            object_list = self.object_list.filter(**filter_kwargs)
         else:
             if self.chronological:
                 object_list = [
@@ -175,11 +173,6 @@ class DatePaginator(Paginator):
                     # tomorrow > today > yesterday
                     if start_date >= getattr(obj, self.date_field) > end_date
                 ]
-
-            object_list.sort(
-                key=lambda obj: getattr(obj, self.date_field),
-                reverse=not self.chronological,
-            )
 
         return object_list
 
