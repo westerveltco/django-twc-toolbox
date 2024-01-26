@@ -34,6 +34,14 @@ class DatePaginator(Paginator):
 
         self.page_date_range = page_date_range
 
+        if kwargs.get("orphans", None):
+            warnings.warn(
+                "The `orphans` parameter is not applicable for DatePaginator and "
+                "will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+
         super().__init__(
             object_list,
             1,  # per_page is 1 as we paginate by date
