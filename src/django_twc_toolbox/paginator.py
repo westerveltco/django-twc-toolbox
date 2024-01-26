@@ -142,24 +142,25 @@ class DatePaginator(Paginator):
     def _get_page_object_list_for_range(
         self, start_date: datetime.datetime, end_date: datetime.datetime
     ) -> QuerySet[Any] | list[Any]:
+        # to make mypy happy
+        object_list: QuerySet[Any] | list[Any]
+
         if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
-            # For QuerySet, filter based on date range
             if self._is_chronological():
-                object_list = self.object_list.filter(
-                    **{
-                        f"{self.date_field}__gte": start_date,
-                        f"{self.date_field}__lt": end_date,
-                    }
-                )
+                filter_kwargs = {
+                    f"{self.date_field}__gte": start_date,
+                    f"{self.date_field}__lt": end_date,
+                }
+                order_by = f"{self.date_field}"
             else:
-                object_list = self.object_list.filter(
-                    **{
-                        f"{self.date_field}__lte": start_date,
-                        f"{self.date_field}__gt": end_date,
-                    }
-                ).order_by(f"-{self.date_field}")
+                filter_kwargs = {
+                    f"{self.date_field}__lte": start_date,
+                    f"{self.date_field}__gt": end_date,
+                }
+                order_by = f"-{self.date_field}"
+
+            object_list = self.object_list.filter(**filter_kwargs).order_by(order_by)
         else:
-            # For non-QuerySet, manually filter and sort
             if self._is_chronological():
                 object_list = [
                     obj
@@ -175,7 +176,6 @@ class DatePaginator(Paginator):
                     if start_date >= getattr(obj, self.date_field) > end_date
                 ]
 
-            # Apply sorting based on the initial order
             object_list.sort(
                 key=lambda obj: getattr(obj, self.date_field),
                 reverse=not self._is_chronological(),
