@@ -454,6 +454,20 @@ class TestDatePaginator:
         with pytest.raises(ValueError):
             DatePaginator(objects, "date")
 
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
+    def test_paginator_explicit_date_range(self, objects):
+        date_range = datetime.timedelta(days=10)
+
+        with pytest.warns(DeprecationWarning):
+            DatePaginator(objects, "date", date_range=date_range)
+
 
 class TestDatePage:
     @pytest.mark.parametrize(
