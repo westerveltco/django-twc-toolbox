@@ -135,8 +135,13 @@ class DatePaginator(Paginator):
         number = self.validate_number(number)
         start_date, end_date = self.date_segments[number - 1]
 
-        object_list: QuerySet[Any] | list[Any]
+        object_list = self._get_page_object_list_for_range(start_date, end_date)
 
+        return self._get_page(object_list, number, self, start_date, end_date)
+
+    def _get_page_object_list_for_range(
+        self, start_date: datetime.datetime, end_date: datetime.datetime
+    ) -> QuerySet[Any] | list[Any]:
         if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
             # For QuerySet, filter based on date range
             if self._is_chronological():
@@ -176,7 +181,7 @@ class DatePaginator(Paginator):
                 reverse=not self._is_chronological(),
             )
 
-        return self._get_page(object_list, number, self, start_date, end_date)
+        return object_list
 
     def _is_chronological(self) -> bool:
         """Check if the object_list is ordered in chronological order
