@@ -228,6 +228,15 @@ class DatePage(Page):
         super().__init__(object_list, number, paginator)
         self.start_date = start_date
         self.end_date = end_date
-        self.min_date = min([start_date, end_date])
-        self.max_date = max([start_date, end_date])
-        self.date_range = (self.min_date, self.max_date)
+
+    @cached_property
+    def min_date(self) -> datetime.datetime:
+        return min([self.start_date, self.end_date])
+
+    @cached_property
+    def max_date(self) -> datetime.datetime:
+        return max([self.start_date, self.end_date])
+
+    @cached_property
+    def date_range(self) -> tuple[datetime.datetime, datetime.datetime]:
+        return (self.min_date, self.max_date)
