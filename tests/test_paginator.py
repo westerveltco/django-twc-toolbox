@@ -11,6 +11,7 @@ from django import VERSION as DJANGO_VERSION
 from django.core.paginator import EmptyPage
 from django.core.paginator import Page
 from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.utils import timezone
 from model_bakery import baker
@@ -392,6 +393,37 @@ class TestDatePaginator:
 
         with pytest.warns(DeprecationWarning):
             DatePaginator(objects, "date", date_range=date_range)
+
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
+    def test_paginator_queries(self, objects, django_assert_num_queries):
+        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
+
+        with django_assert_num_queries(0):
+            _ = Paginator(objects, 1).page(1)
+            _ = paginator.page(1)
+
+        with django_assert_num_queries(0):
+            _ = Paginator(objects, 1).num_pages
+            _ = paginator.num_pages
+
+        with django_assert_num_queries(0):
+            _ = Paginator(objects, 1).count
+            _ = paginator.count
+
+        with django_assert_num_queries(0):
+            _ = Paginator(objects, 1).page_range
+            _ = paginator.page_range
+
+        with django_assert_num_queries(0):
+            _ = Paginator(objects, 1).object_list
+            _ = paginator.object_list
 
 
 class TestDatePaginatorInheritance:
