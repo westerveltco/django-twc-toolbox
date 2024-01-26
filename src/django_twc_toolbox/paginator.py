@@ -64,15 +64,7 @@ class DatePaginator(Paginator):
         elif not self.object_list:
             return []
 
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
-            first_obj = self.object_list.first()
-            last_obj = self.object_list.last()
-        else:
-            first_obj = self.object_list[0]
-            last_obj = self.object_list[-1]
-
-        first_date = getattr(first_obj, self.date_field)
-        last_date = getattr(last_obj, self.date_field)
+        first_date, last_date = self.object_list_date_range
 
         segments = []
         current_start_date = first_date
@@ -188,6 +180,15 @@ class DatePaginator(Paginator):
         if self.count == 1:
             return True
 
+        first_date, last_date = self.object_list_date_range
+
+        return first_date < last_date
+
+    def _get_page(self, *args, **kwargs) -> DatePage:
+        return DatePage(*args, **kwargs)
+
+    @cached_property
+    def object_list_date_range(self) -> tuple[datetime.datetime, datetime.datetime]:
         if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
@@ -198,10 +199,7 @@ class DatePaginator(Paginator):
         first_date = getattr(first_obj, self.date_field)
         last_date = getattr(last_obj, self.date_field)
 
-        return first_date < last_date
-
-    def _get_page(self, *args, **kwargs) -> DatePage:
-        return DatePage(*args, **kwargs)
+        return (first_date, last_date)
 
     @cached_property
     def num_pages(self) -> int:
