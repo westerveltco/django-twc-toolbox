@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import warnings
 from typing import TYPE_CHECKING
 
 from django.core.paginator import Page
@@ -19,11 +20,25 @@ class DatePaginator(Paginator):
         self,
         object_list: _SupportsPagination,
         date_field: str,
-        date_range: datetime.timedelta,
+        page_date_range: datetime.timedelta | None = None,
+        date_range: datetime.timedelta | None = None,
         **kwargs,
     ) -> None:
         self.date_field = date_field
-        self.date_range = date_range
+
+        if date_range and not page_date_range:
+            warnings.warn(
+                "The `date_range` argument is deprecated in favor of `page_date_range` "
+                "and will be removed in v0.3.0.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            page_date_range = date_range
+        elif not page_date_range:
+            raise ValueError("The `page_date_range` argument is required.")
+
+        self.page_date_range = page_date_range
+
         super().__init__(
             object_list,
             1,  # per_page is 1 as we paginate by date
@@ -59,7 +74,7 @@ class DatePaginator(Paginator):
             # add the date_range. to start we add the date_range to the first date.
             # basically any time we need to get the next segment or move the date
             # goalpost, we use addition
-            current_end_date = first_date + self.date_range
+            current_end_date = first_date + self.page_date_range
             # less than or equal because we are moving forwards in time and dates
             # in the future are greater than dates in the past
             # yesterday < today < tomorrow
@@ -67,7 +82,7 @@ class DatePaginator(Paginator):
                 segments.append((current_start_date, current_end_date))
                 current_start_date = current_end_date
                 # add because we are moving forwards in time
-                current_end_date += self.date_range
+                current_end_date += self.page_date_range
             # Append the last segment to cover any remaining dates not included in the
             # previous segments. This is necessary because the date range defined by
             # `date_range` might not perfectly divide the total span of dates. This final
@@ -83,14 +98,14 @@ class DatePaginator(Paginator):
             # next segment's end date. to start we subtract the date_range from the
             # first date. opposite to above, any time we need to get the next segment
             # or move the date goalpost, we use subtraction
-            current_end_date = first_date - self.date_range
+            current_end_date = first_date - self.page_date_range
             # greater than or equal because we are moving backwards in time
             # tomorrow > today > yesterday
             while current_end_date >= last_date:
                 segments.append((current_start_date, current_end_date))
                 current_start_date = current_end_date
                 # subtract because we are moving backwards in time
-                current_end_date -= self.date_range
+                current_end_date -= self.page_date_range
 
             # Append the last segment to cover the remaining dates, similar to above.
             # We subtract one day from `last_date` to ensure the entire day is covered.
