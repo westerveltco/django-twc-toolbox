@@ -30,6 +30,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - The `date_range` argument of the `DatePaginator` class is now deprecated. It will be removed in version 0.4.0.
 
+### Removed
+
+- Removed the `orphans` kwarg from `DatePaginator`, which is inherited from Django's built-in `Paginator`. Given its date range-based pagination, the concept of orphans, applicable to item count per page, is not super useful. If it is passed in, a warning will be issued.
+
 ## [0.2.1]
 
 ### Fixed

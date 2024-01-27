@@ -419,6 +419,10 @@ class TestDatePaginatorInheritance:
         if DJANGO_VERSION >= (5, 0, 0):
             assert paginator.error_messages == paginator.default_error_messages
 
+    def test_orphans(self, objects):
+        with pytest.warns(UserWarning):
+            DatePaginator(objects, "date", datetime.timedelta(days=10), orphans=5)
+
     def test_allow_empty_first_page(self):
         allow_paginator = DatePaginator(
             DateOrderableModel.objects.none().order_by("date"),
