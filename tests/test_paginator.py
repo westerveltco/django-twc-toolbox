@@ -392,6 +392,44 @@ class TestDatePaginator:
 
         with pytest.warns(DeprecationWarning):
             DatePaginator(objects, "date", date_range=date_range)
+    @pytest.mark.parametrize(
+        "model_data_queryset",
+        [
+            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
+            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
+        ],
+        indirect=["model_data_queryset"],
+    )
+    def test_object_list_date_range(self, objects):
+        paginator = DatePaginator(objects, "date", datetime.timedelta(days=10))
+
+        first_date = paginator.page(1).min_date
+        print("pagniator.page(1).min_date", paginator.page(1).min_date)
+        print("pagniator.page(1).max_date", paginator.page(1).max_date)
+        print("paginator.page(1).start_date", paginator.page(1).start_date)
+        print("paginator.page(1).end_date", paginator.page(1).end_date)
+        last_date = paginator.page(paginator.num_pages).max_date
+        print("pagniator.page(paginator.num_pages).min_date", paginator.page(paginator.num_pages).min_date)
+        print("pagniator.page(paginator.num_pages).max_date", paginator.page(paginator.num_pages).max_date)
+        print("paginator.page(paginator.num_pages).start_date", paginator.page(paginator.num_pages).start_date)
+        print("paginator.page(paginator.num_pages).end_date", paginator.page(paginator.num_pages).end_date)
+
+        if isinstance(objects, QuerySet):  # type: ignore[misc]
+            print("objects.first().date", objects.first())
+            print("objects.last().date", objects.last())
+            print("paginator.object_list.first().date", paginator.object_list.first())
+            print("paginator.object_list.last().date", paginator.object_list.last())
+        else:
+            print("objects[0].date", objects[0])
+            print("objects[-1].date", objects[-1])
+            print("paginator.object_list[0].date", paginator.object_list[0])
+            print("paginator.object_list[-1].date", paginator.object_list[-1])
+        print("paginator.object_list_date_range[0]", paginator.object_list_date_range[0])
+        print("paginator.object_list_date_range[1]", paginator.object_list_date_range[1])
+        print("first_date", first_date)
+        print("last_date", last_date)
+
+        assert paginator.object_list_date_range == (first_date, last_date)
 
 
 class TestDatePaginatorInheritance:
