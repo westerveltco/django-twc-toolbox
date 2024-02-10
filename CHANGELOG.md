@@ -13,8 +13,9 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Removed - for now removed features
 ### Fixed - for any bug fixes
 ### Security - in case of vulnerabilities
-[${version}]: https://github.com/westerveltco/django-email-toolbox/releases/tag/v${version}
+[${version}]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v${version}
 -->
+
 ## [Unreleased]
 
 ### Added
