@@ -4,34 +4,21 @@ import logging
 
 from django.conf import settings
 
+from .settings import DEFAULT_SETTINGS
+
 pytest_plugins = []  # type: ignore
 
 
-# Settings fixtures to bootstrap our tests
 def pytest_configure(config):
     logging.disable(logging.CRITICAL)
 
-    settings.configure(
-        ALLOWED_HOSTS=["*"],
-        CACHES={
-            "default": {
-                "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-            }
-        },
-        DATABASES={
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": ":memory:",
-            },
-        },
-        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
-        INSTALLED_APPS=[
-            "django.contrib.contenttypes",
-            "django_twc_toolbox",
-            "tests.dummy",
-        ],
-        LOGGING_CONFIG=None,
-        PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"],
-        SECRET_KEY="NOTASECRET",
-        USE_TZ=True,
-    )
+    settings.configure(**DEFAULT_SETTINGS, **TEST_SETTINGS)
+
+
+TEST_SETTINGS = {
+    "INSTALLED_APPS": [
+        "django.contrib.contenttypes",
+        "django_twc_toolbox",
+        "tests.dummy",
+    ]
+}

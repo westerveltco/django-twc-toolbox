@@ -13,8 +13,9 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Removed - for now removed features
 ### Fixed - for any bug fixes
 ### Security - in case of vulnerabilities
-[${version}]: https://github.com/westerveltco/django-email-toolbox/releases/tag/v${version}
+[${version}]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v${version}
 -->
+
 ## [Unreleased]
 
 ### Added
@@ -25,6 +26,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Updated the `DatePaginator` class to use the `page_date_range` argument instead of the deprecated `date_range` argument.
 - `DatePage.min_date`, `DatePage.max_date`, and `DatePage.date_range` are now `cached_property` attributes instead of being set in the `__init__` method.
+- Now using [`django-twc-package`](https://github.com/westerveltco/django-twc-package) template for repository and package structure.
 
 ### Deprecated
 
