@@ -27,6 +27,7 @@ class req:
     Returns:
         The decorated function.
     """
+
     def __init__(self, url: str, *, client: httpx.Client | None = None) -> None:
         self.url = url
         self.client = client or httpx.Client()
