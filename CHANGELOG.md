@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+-   `py.typed` added to the project.
+
 ### Changed
 
 -   Now using v2024.27 of `django-twc-package`.
