@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+-   Added a `CuidField` and extra dependencies needed to use it. Install the package with `django-twc-toolbox[cuid]` in order to use it.
+
 ## [0.3.1]
 
 ### Added

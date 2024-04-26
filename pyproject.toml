@@ -3,9 +3,7 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-authors = [
-  {name = "Josh Thomas", email = "josh@joshthomas.dev"}
-]
+authors = [{name = "Josh Thomas", email = "josh@joshthomas.dev"}]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Framework :: Django",
@@ -24,9 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython"
 ]
-dependencies = [
-  "django>=3.2"
-]
+dependencies = ["django>=3.2"]
 description = "Various tools for Django projects at The Westervelt Company."
 dynamic = ["version"]
 keywords = []
@@ -36,6 +32,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
+cuid = ["cuid", "django-charid-field"]
 dev = [
   "bumpver",
   "copier",
@@ -80,15 +77,9 @@ tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-".copier/package.yml" = [
-  'current_version: {version}'
-]
-"src/django_twc_toolbox/__init__.py" = [
-  '__version__ = "{version}"'
-]
-"tests/test_version.py" = [
-  'assert __version__ == "{version}"'
-]
+".copier/package.yml" = ['current_version: {version}']
+"src/django_twc_toolbox/__init__.py" = ['__version__ = "{version}"']
+"tests/test_version.py" = ['assert __version__ == "{version}"']
 
 [tool.coverage.paths]
 source = ["src"]
@@ -105,10 +96,7 @@ exclude_lines = [
 fail_under = 75
 
 [tool.coverage.run]
-omit = [
-  "src/django_twc_toolbox/migrations/*",
-  "tests/*"
-]
+omit = ["src/django_twc_toolbox/migrations/*", "tests/*"]
 source = ["django_twc_toolbox"]
 
 [tool.django-stubs]
@@ -119,10 +107,7 @@ strict_settings = false
 indent = 2
 
 [tool.hatch.build]
-exclude = [
-  ".*",
-  "Justfile"
-]
+exclude = [".*", "Justfile"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/django_twc_toolbox"]
@@ -135,9 +120,7 @@ check_untyped_defs = true
 exclude = "docs/.*\\.py$"
 mypy_path = "src/"
 no_implicit_optional = true
-plugins = [
-  "mypy_django_plugin.main"
-]
+plugins = ["mypy_django_plugin.main"]
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
@@ -145,10 +128,11 @@ warn_unused_ignores = true
 [[tool.mypy.overrides]]
 ignore_errors = true
 ignore_missing_imports = true
-module = [
-  "django_twc_toolbox.*.migrations.*",
-  "tests.*"
-]
+module = ["django_twc_toolbox.*.migrations.*", "tests.*"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["charidfield.*", "cuid.*"]
 
 [tool.mypy_django_plugin]
 ignore_missing_model_attributes = true
