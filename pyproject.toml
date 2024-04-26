@@ -3,9 +3,7 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-authors = [
-  {name = "Josh Thomas", email = "josh@joshthomas.dev"}
-]
+authors = [{ name = "Josh Thomas", email = "josh@joshthomas.dev" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Framework :: Django",
@@ -22,20 +20,19 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: Implementation :: CPython"
+  "Programming Language :: Python :: Implementation :: CPython",
 ]
-dependencies = [
-  "django>=3.2"
-]
+dependencies = ["django>=3.2"]
 description = "Various tools for Django projects at The Westervelt Company."
 dynamic = ["version"]
 keywords = []
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 name = "django-twc-toolbox"
 readme = "README.md"
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
+cuid = ["cuid", "django-charid-field"]
 dev = [
   "bumpver",
   "copier",
@@ -53,7 +50,7 @@ dev = [
   "pytest-django",
   "pytest-randomly",
   "pytest-reverse",
-  "pytest-xdist"
+  "pytest-xdist",
 ]
 docs = [
   "cogapp",
@@ -62,7 +59,7 @@ docs = [
   "sphinx",
   "sphinx-autobuild",
   "sphinx-copybutton",
-  "sphinx-inline-tabs"
+  "sphinx-inline-tabs",
 ]
 lint = ["pre-commit"]
 
@@ -75,20 +72,14 @@ Source = "https://github.com/westerveltco/django-twc-toolbox"
 commit = true
 commit_message = ":bookmark: bump version {old_version} -> {new_version}"
 current_version = "0.3.1"
-push = false  # set to false for CI
+push = false                                                              # set to false for CI
 tag = false
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 
 [tool.bumpver.file_patterns]
-".copier/package.yml" = [
-  'current_version: {version}'
-]
-"src/django_twc_toolbox/__init__.py" = [
-  '__version__ = "{version}"'
-]
-"tests/test_version.py" = [
-  'assert __version__ == "{version}"'
-]
+".copier/package.yml" = ['current_version: {version}']
+"src/django_twc_toolbox/__init__.py" = ['__version__ = "{version}"']
+"tests/test_version.py" = ['assert __version__ == "{version}"']
 
 [tool.coverage.paths]
 source = ["src"]
@@ -100,15 +91,12 @@ exclude_lines = [
   "if not DEBUG:",
   "if settings.DEBUG:",
   "if TYPE_CHECKING:",
-  'def __str__\(self\)\s?\-?\>?\s?\w*\:'
+  'def __str__\(self\)\s?\-?\>?\s?\w*\:',
 ]
 fail_under = 75
 
 [tool.coverage.run]
-omit = [
-  "src/django_twc_toolbox/migrations/*",
-  "tests/*"
-]
+omit = ["src/django_twc_toolbox/migrations/*", "tests/*"]
 source = ["django_twc_toolbox"]
 
 [tool.django-stubs]
@@ -119,10 +107,7 @@ strict_settings = false
 indent = 2
 
 [tool.hatch.build]
-exclude = [
-  ".*",
-  "Justfile"
-]
+exclude = [".*", "Justfile"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/django_twc_toolbox"]
@@ -135,9 +120,7 @@ check_untyped_defs = true
 exclude = "docs/.*\\.py$"
 mypy_path = "src/"
 no_implicit_optional = true
-plugins = [
-  "mypy_django_plugin.main"
-]
+plugins = ["mypy_django_plugin.main"]
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
@@ -145,10 +128,7 @@ warn_unused_ignores = true
 [[tool.mypy.overrides]]
 ignore_errors = true
 ignore_missing_imports = true
-module = [
-  "django_twc_toolbox.*.migrations.*",
-  "tests.*"
-]
+module = ["django_twc_toolbox.*.migrations.*", "tests.*"]
 
 [tool.mypy_django_plugin]
 ignore_missing_model_attributes = true
@@ -181,7 +161,7 @@ exclude = [
   "dist",
   "migrations",
   "node_modules",
-  "venv"
+  "venv",
 ]
 extend-include = ["*.pyi?"]
 indent-width = 4
@@ -203,13 +183,13 @@ quote-style = "double"
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F", "I"]
-ignore = ["E501", "E741"]  # temporary
+ignore = ["E501", "E741"] # temporary
 select = [
   "B",  # flake8-bugbear
   "E",  # Pycodestyle
   "F",  # Pyflakes
   "I",  # isort
-  "UP"  # pyupgrade
+  "UP", # pyupgrade
 ]
 unfixable = []
 
