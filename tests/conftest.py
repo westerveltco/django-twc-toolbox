@@ -17,8 +17,10 @@ def pytest_configure(config):
 
 TEST_SETTINGS = {
     "INSTALLED_APPS": [
+        "django.contrib.auth",
         "django.contrib.contenttypes",
         "django_twc_toolbox",
+        "simple_history",
         "tests.dummy",
     ]
 }

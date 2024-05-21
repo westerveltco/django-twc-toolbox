@@ -39,6 +39,7 @@ dev = [
   "coverage[toml]",
   "django-stubs",
   "django-stubs-ext",
+  "django-twc-toolbox[cuid,history]",
   "faker",
   "hatch",
   "mypy",
@@ -60,6 +61,7 @@ docs = [
   "sphinx-copybutton",
   "sphinx-inline-tabs"
 ]
+history = ["django-simple-history"]
 lint = ["pre-commit"]
 
 [project.urls]
@@ -131,7 +133,7 @@ module = ["django_twc_toolbox.*.migrations.*", "tests.*"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ["charidfield.*", "cuid.*"]
+module = ["charidfield.*", "cuid.*", "simple_history.*"]
 
 [tool.mypy_django_plugin]
 ignore_missing_model_attributes = true
