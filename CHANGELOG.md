@@ -21,6 +21,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Added
 
 -   Added a `WithHistory` abstract model for integrating `django-simple-history` `HistoricalRecords`.
+-   Added custom `createsuperuser` management command to allow for resetting an existing superuser's password in development when `DEBUG=True`.
 
 ## [0.4.0]
 
