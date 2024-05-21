@@ -22,6 +22,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 -   Added a `CuidField` and extra dependencies needed to use it. Install the package with `django-twc-toolbox[cuid]` in order to use it.
 
+### Removed
+
+-   Removed support for Django 3.2 (EOL April 2024).
+
 ## [0.3.1]
 
 ### Added
