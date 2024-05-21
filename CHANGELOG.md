@@ -24,7 +24,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Removed
 
--   Removed support for Django 3.2 (EOL April 2024).
+-   Dropped support for Django 3.2 (EOL April 2024).
 
 ## [0.3.1]
 
