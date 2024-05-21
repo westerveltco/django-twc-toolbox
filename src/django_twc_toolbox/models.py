@@ -1,6 +1,13 @@
 from __future__ import annotations
 
+from importlib.util import find_spec
+
 from django.db import models
+
+if find_spec("simple_history"):
+    from simple_history.models import HistoricalRecords
+else:
+    HistoricalRecords = None
 
 
 class TimeStamped(models.Model):
@@ -61,3 +68,27 @@ class TimeStamped(models.Model):
 
     def is_edited(self) -> bool:
         return self.created_at != self.updated_at
+
+
+class WithHistory(models.Model):
+    """
+    Abstract model for adding historical records to a model.
+    """
+
+    history = HistoricalRecords(inherit=True)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, without_history: bool = False, **kwargs) -> None:
+        if without_history:
+            self.save_without_history(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
+
+    def save_without_history(self, *args, **kwargs) -> None:
+        self.skip_history_when_saving = True
+        try:
+            self.save(*args, **kwargs)
+        finally:
+            del self.skip_history_when_saving

@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+-   Added a `WithHistory` abstract model for integrating `django-simple-history` `HistoricalRecords`.
+
 ## [0.4.0]
 
 ### Added
