@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.4.0]
+
 ### Added
 
 -   Added a `CuidField` and extra dependencies needed to use it. Install the package with `django-twc-toolbox[cuid]` in order to use it.
@@ -84,9 +86,10 @@ Initial release!
 
 -   Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.3.1...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.4.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
 [0.3.0]: https://github.com/westerveltco/django-twc-toolbox.git/releases/tag/v0.3.0
 [0.3.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.3.1
+[0.4.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.4.0
