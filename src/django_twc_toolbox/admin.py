@@ -11,9 +11,12 @@ from django.http import HttpRequest
 
 if sys.version_info <= (3, 8):
     from typing_extensions import TypeAlias
-    from typing_extensions import override
 else:
     from typing import TypeAlias
+
+if sys.version_info <= (3, 9):
+    from typing_extensions import override
+else:
     from typing import override
 
 _K = TypeVar("_K")
