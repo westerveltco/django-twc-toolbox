@@ -1,44 +1,53 @@
 from __future__ import annotations
 
 from typing import Generic
+from typing import TypeAlias
 from typing import TypeVar
+from typing import override
 
 from django.contrib import admin
-from django.db import models
+from django.contrib.admin.options import BaseModelAdmin
+from django.db.models.base import Model
 from django.http import HttpRequest
 
-_ChildModelT = TypeVar("_ChildModelT", bound=models.Model)
-_ParentModelT = TypeVar("_ParentModelT", bound=models.Model)
+_K = TypeVar("_K")
+_ListOrTuple: TypeAlias = list[_K] | tuple[_K, ...] | tuple[()]
+_ChildModelT = TypeVar("_ChildModelT", bound=Model)
+_ParentModelT = TypeVar("_ParentModelT", bound=Model)
 
 
-class ReadOnlyInlineMixin(Generic[_ChildModelT, _ParentModelT]):
+class ReadOnlyModelAdmin(
+    Generic[_ChildModelT, _ParentModelT], BaseModelAdmin[_ChildModelT]
+):
     can_delete = False
     extra = 0
-    model: type[_ChildModelT]  # type: ignore[reportUninitializedInstanceVariable]
 
+    @override
     def get_readonly_fields(
         self, request: HttpRequest, obj: _ChildModelT | None = None
-    ) -> list[str] | tuple[str]:
+    ) -> _ListOrTuple[str]:
         return [f.name for f in self.model._meta.fields]
 
-    def has_add_permission(
+    @override
+    def has_add_permission(  # type: ignore[override]
         self, request: HttpRequest, obj: _ParentModelT | None
     ) -> bool:
         return False
 
-    def has_change_permission(
+    @override
+    def has_change_permission(  # type: ignore[override]
         self, request: HttpRequest, obj: _ParentModelT | None = None
     ) -> bool:
         return False
 
 
 class ReadOnlyStackedInline(
-    ReadOnlyInlineMixin[_ChildModelT, _ParentModelT],
+    ReadOnlyModelAdmin[_ChildModelT, _ParentModelT],
     admin.StackedInline[_ChildModelT, _ParentModelT],
 ): ...
 
 
 class ReadOnlyTabularInline(
-    ReadOnlyInlineMixin[_ChildModelT, _ParentModelT],
+    ReadOnlyModelAdmin[_ChildModelT, _ParentModelT],
     admin.TabularInline[_ChildModelT, _ParentModelT],
 ): ...

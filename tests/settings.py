@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import django_stubs_ext
+
+django_stubs_ext.monkeypatch()
+
 DEFAULT_SETTINGS = {
     "ALLOWED_HOSTS": ["*"],
     "DEBUG": False,
