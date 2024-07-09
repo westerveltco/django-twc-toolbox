@@ -15,3 +15,14 @@ class DateTimeOrderableModel(models.Model):
 
 class ModelWithHistory(WithHistory):
     name = models.CharField(max_length=255)
+
+
+class Parent(models.Model):
+    foo = models.CharField(max_length=255)
+
+
+class Child(models.Model):
+    parent = models.ForeignKey(
+        "dummy.Parent", on_delete=models.CASCADE, related_name="parents"
+    )
+    bar = models.CharField(max_length=255)
