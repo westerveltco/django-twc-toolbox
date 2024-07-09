@@ -41,7 +41,7 @@ class TestReadOnlyInline:
         inline = inline_class(Parent, admin.site)
         readonly_fields = inline.get_readonly_fields(request)
 
-        assert set(inline.fields) in set(readonly_fields)
+        assert set(inline.fields).issubset(readonly_fields)
 
     def test_inline_permissions(self, rf, admin_user, inline_class):
         request = rf.get("/")
