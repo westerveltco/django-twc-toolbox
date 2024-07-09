@@ -9,15 +9,15 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.db.models.base import Model
 from django.http import HttpRequest
 
-if sys.version_info <= (3, 8):
-    from typing_extensions import TypeAlias
-else:
+if sys.version_info >= (3, 9):
     from typing import TypeAlias
-
-if sys.version_info <= (3, 11):
-    from typing_extensions import override
 else:
+    from typing_extensions import TypeAlias
+
+if sys.version_info >= (3, 11):
     from typing import override
+else:
+    from typing_extensions import override
 
 _K = TypeVar("_K")
 _ListOrTuple: TypeAlias = list[_K] | tuple[_K, ...] | tuple[()]
