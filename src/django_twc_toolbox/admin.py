@@ -9,12 +9,12 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.db.models.base import Model
 from django.http import HttpRequest
 
-if sys.version_info >= (3, 9):
+if sys.version_info >= (3, 10):
     from typing import TypeAlias
 else:
     from typing_extensions import TypeAlias
 
-if sys.version_info >= (3, 11):
+if sys.version_info >= (3, 12):
     from typing import override
 else:
     from typing_extensions import override
