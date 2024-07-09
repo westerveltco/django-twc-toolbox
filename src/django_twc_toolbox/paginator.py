@@ -66,13 +66,13 @@ class DatePaginator(Paginator):
         # Check if the object_list is empty.
         # Check for `exists()` first for performance, falling back in case it's
         # not a QuerySet.
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
+        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
             if not self.object_list.exists():
                 return []
         elif not self.object_list:
             return []
 
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
+        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -145,7 +145,7 @@ class DatePaginator(Paginator):
         # to make mypy happy
         object_list: QuerySet[Any] | list[Any]
 
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
+        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
             if self.chronological:
                 filter_kwargs = {
                     f"{self.date_field}__gte": start_date,
@@ -195,7 +195,7 @@ class DatePaginator(Paginator):
         if self.count == 1:
             return True
 
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
+        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -216,7 +216,7 @@ class DatePaginator(Paginator):
 
     def _check_object_list_is_ordered(self):
         """Ensure that the object_list is ordered by date_field"""
-        if isinstance(self.object_list, QuerySet):  # type: ignore[misc]
+        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
             ordering_fields = self.object_list.query.order_by
             if not ordering_fields or not any(
                 field in [self.date_field, f"-{self.date_field}"]
