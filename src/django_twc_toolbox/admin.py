@@ -1,18 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import sys
+from typing import Generic
+from typing import TypeVar
+from typing import override
 
 from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.db.models.base import Model
 from django.http import HttpRequest
 
-if TYPE_CHECKING:
-    from typing import Generic
+if sys.version_info <= (3, 8):
+    from typing_extensions import TypeAlias
+else:
     from typing import TypeAlias
-    from typing import TypeVar
-    from typing import override
-
 
 _K = TypeVar("_K")
 _ListOrTuple: TypeAlias = list[_K] | tuple[_K, ...] | tuple[()]
