@@ -14,7 +14,7 @@ if sys.version_info <= (3, 8):
 else:
     from typing import TypeAlias
 
-if sys.version_info <= (3, 9):
+if sys.version_info <= (3, 11):
     from typing_extensions import override
 else:
     from typing import override
