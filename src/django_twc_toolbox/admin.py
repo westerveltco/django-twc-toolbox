@@ -21,7 +21,7 @@ else:
 
 _K = TypeVar("_K")
 
-if sys.version_info >= (3, 9):
+if sys.version_info >= (3, 10):
     _ListOrTuple: TypeAlias = list[_K] | tuple[_K, ...] | tuple[()]
 else:
     from typing import List
