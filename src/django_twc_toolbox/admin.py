@@ -20,13 +20,16 @@ else:
     from typing_extensions import override
 
 _K = TypeVar("_K")
+
 if sys.version_info >= (3, 9):
     _ListOrTuple: TypeAlias = list[_K] | tuple[_K, ...] | tuple[()]
 else:
     from typing import List
     from typing import Tuple
+    from typing import Union
 
-    _ListOrTuple: TypeAlias = List[_K] | Tuple[_K, ...] | Tuple[()]
+    _ListOrTuple: TypeAlias = Union[List[_K], Tuple[_K, ...], Tuple[()]]
+
 _ChildModelT = TypeVar("_ChildModelT", bound=Model)
 _ParentModelT = TypeVar("_ParentModelT", bound=Model)
 
