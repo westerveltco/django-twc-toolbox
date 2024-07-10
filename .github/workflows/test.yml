@@ -76,7 +76,7 @@ jobs:
 
       - uses: westerveltco/setup-ci-action@v0
         with:
-          python-version: 3.8
+          python-version: 3.12
           extra-python-dependencies: nox
           use-uv: true
 
