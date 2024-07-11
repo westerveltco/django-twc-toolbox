@@ -7,14 +7,14 @@ from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.http import HttpRequest
 
-from django_twc_toolbox.types import ChildModelT
-from django_twc_toolbox.types import ListOrTuple
-from django_twc_toolbox.types import ParentModelT
+from django_twc_toolbox._types import ChildModelT
+from django_twc_toolbox._types import ListOrTuple
+from django_twc_toolbox._types import ParentModelT
 
 if sys.version_info >= (3, 12):
     from typing import override
 else:
-    from typing_extensions import override
+    from typing_extensions import override  # pyright: ignore[reportUnreachable]
 
 
 class ReadOnlyModelAdmin(
@@ -42,13 +42,13 @@ class ReadOnlyModelAdmin(
         return False
 
 
-class ReadOnlyStackedInline(
+class ReadOnlyStackedInline(  # pyright: ignore[reportUnsafeMultipleInheritance]
     ReadOnlyModelAdmin[ChildModelT, ParentModelT],
     admin.StackedInline[ChildModelT, ParentModelT],
 ): ...
 
 
-class ReadOnlyTabularInline(
+class ReadOnlyTabularInline(  # pyright: ignore[reportUnsafeMultipleInheritance]
     ReadOnlyModelAdmin[ChildModelT, ParentModelT],
     admin.TabularInline[ChildModelT, ParentModelT],
 ): ...
