@@ -39,7 +39,7 @@ dev = [
   "coverage[toml]",
   "django-stubs",
   "django-stubs-ext",
-  "django-twc-toolbox[cuid,history]",
+  "django-twc-toolbox[cuid,history,ninja]",
   "faker",
   "hatch",
   "mypy",
@@ -63,6 +63,7 @@ docs = [
 ]
 history = ["django-simple-history"]
 lint = ["pre-commit"]
+ninja = ["django-ninja"]
 
 [project.urls]
 Documentation = "https://django-twc-toolbox.westervelt.dev/"
