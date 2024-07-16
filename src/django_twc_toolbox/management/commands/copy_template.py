@@ -24,6 +24,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from shutil import copy2
 
 from django.apps import apps
@@ -56,25 +57,27 @@ class Command(BaseCommand):
         # 2. Check that the source file exists - use template loaders for this
         source_file = get_template_absolute_path(source)
         if source_file is None:
-            self.stdout.write(self.style.ERROR("Source Template doesn’t exist"))
+            self.stdout.write(self.style.ERROR("Source Template doesn't exist"))
             return
         base_dir = settings.BASE_DIR  # type: ignore[misc]
         # 4. if destination, then create Path object and copy
         if destination is not None:
             app_config = apps.get_app_config(destination)
             destination_path = base_dir / app_config.path / "templates" / source
-        # 5/ else inspect TEMPLATES[DIRS] setting and use first option if avaiable
+        # 5/ else inspect TEMPLATES[DIRS] setting and use first option if available
         else:
             try:
-                destination_path = settings.TEMPLATES[0]["DIRS"][0] / source
+                template_dir = Path(settings.TEMPLATES[0]["DIRS"][0])
+                destination_path = template_dir / source
             except IndexError:
                 # 6/ otherwise create project level template directory and dump file there.
-                destination_path = base_dir / "templates" / source
+                destination_path = Path(settings.BASE_DIR) / "templates" / source
                 # PRINT what settings need to be modified
                 self.stdout.write(
                     self.style.WARNING(
-                        'Update TEMPLATES["DIRS"] to include the follow entry "BASE_DIR / "templates","'
+                        'Update TEMPLATES["DIRS"] to include the following entry "BASE_DIR / "templates","'
                     )
                 )
-        destination_path.parent.mkdir(parents=True)
+
+        destination_path.parent.mkdir(parents=True, exist_ok=True)
         copy2(source_file, destination_path)
