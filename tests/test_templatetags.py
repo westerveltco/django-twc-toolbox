@@ -20,49 +20,84 @@ pytestmark = pytest.mark.django_db
 User = get_user_model()
 
 
-def test_initials():
-    user = User(username="johndoe", first_name="John", last_name="Doe")
-    assert initials(user) == "JD"
+@pytest.mark.parametrize(
+    "model,kwargs,expected",
+    [
+        (User, {"username": "johndoe", "first_name": "John", "last_name": "Doe"}, "JD"),
+        (User, {"username": "janedoe"}, "J"),
+        (AnonymousUser, {}, "N/A"),
+    ],
+)
+def test_initials(model, kwargs, expected):
+    user = model(**kwargs)
 
-    user = User(username="janedoe")
-    assert initials(user) == "J"
-
-    anonymous_user = AnonymousUser()
-    assert initials(anonymous_user) == "N/A"
+    assert initials(user) == expected
 
 
-def test_initials_templatetag():
-    user = baker.make(User, username="testuser", first_name="Test", last_name="User")
+@pytest.mark.parametrize(
+    "model,kwargs,expected",
+    [
+        (User, {"username": "johndoe", "first_name": "John", "last_name": "Doe"}, "JD"),
+        (User, {"username": "janedoe"}, "J"),
+        (AnonymousUser, {}, "N/A"),
+    ],
+)
+def test_initials_templatetag(model, kwargs, expected):
+    if kwargs:
+        user = baker.make(model, **kwargs)
+    else:
+        user = model()
 
     template = Template("{% load django_twc_toolbox %} Initials: {{ user|initials }}")
 
     rendered = template.render(Context({"user": user}))
 
-    assert "Initials: TU" in rendered
+    assert f"Initials: {expected}" in rendered
 
 
-def test_display_name():
-    user = User(username="johndoe", first_name="John", last_name="Doe")
-    assert display_name(user) == "John Doe"
+@pytest.mark.parametrize(
+    "model,kwargs,expected",
+    [
+        (
+            User,
+            {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
+            "John Doe",
+        ),
+        (User, {"username": "janedoe", "first_name": "Jane"}, "Jane"),
+        (User, {"username": "bobsmith"}, "Bobsmith"),
+        (AnonymousUser, {}, "N/A"),
+    ],
+)
+def test_display_name(model, kwargs, expected):
+    user = model(**kwargs)
 
-    user = User(username="janedoe", first_name="Jane")
-    assert display_name(user) == "Jane"
-
-    user = User(username="bobsmith")
-    assert display_name(user) == "Bobsmith"
-
-    anonymous_user = AnonymousUser()
-    assert display_name(anonymous_user) == "N/A"
+    assert display_name(user) == expected
 
 
-def test_display_name_templatetag():
-    user = baker.make(User, username="testuser", first_name="Test", last_name="User")
+@pytest.mark.parametrize(
+    "model,kwargs,expected",
+    [
+        (
+            User,
+            {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
+            "John Doe",
+        ),
+        (User, {"username": "janedoe", "first_name": "Jane"}, "Jane"),
+        (User, {"username": "bobsmith"}, "Bobsmith"),
+        (AnonymousUser, {}, "N/A"),
+    ],
+)
+def test_display_name_templatetag(model, kwargs, expected):
+    if kwargs:
+        user = baker.make(model, **kwargs)
+    else:
+        user = model()
 
     template = Template("{% load django_twc_toolbox %} Name: {{ user|display_name }}")
 
     rendered = template.render(Context({"user": user}))
 
-    assert "Name: Test User" in rendered
+    assert f"Name: {expected}" in rendered
 
 
 @pytest.mark.parametrize(
@@ -133,7 +168,7 @@ def test_elided_page_range_templatetag(object_count, per_page, page, expected):
     [
         ("/test/?page=2&sort=name", {"foo": "bar"}, "?page=2&sort=name&foo=bar"),
         ("/test/?page=2&sort=name", {"page": 3}, "?page=3&sort=name"),
-        ("/test/?page=2&sort=name", {"sort": None}, "?page=3"),
+        ("/test/?page=2&sort=name", {"sort": None}, "?page=2"),
         ("/test/?page=2&sort=name", {"page": None, "sort": None}, ""),
     ],
 )
@@ -154,13 +189,32 @@ def test_query_string_querydict(rf):
     assert result == "?a=1&b=new&c=3&d=added"
 
 
-def test_query_string_templatetag(rf):
-    request = rf.get("test/?filter=active")
+@pytest.mark.parametrize(
+    "url,params,expected",
+    [
+        (
+            "/test/?page=2&sort=name",
+            {"foo": "bar"},
+            "?page=2&amp;sort=name&amp;foo=bar",
+        ),
+        ("/test/?page=2&sort=name", {"page": 3}, "?page=3&amp;sort=name"),
+        ("/test/?page=2&sort=name", {"sort": None}, "?page=2"),
+        ("/test/?page=2&sort=name", {"page": None, "sort": None}, ""),
+    ],
+)
+def test_query_string_templatetag(url, params, expected, rf):
+    request = rf.get(url)
 
+    param_string = " ".join(
+        [
+            f"{key}='{value}'" if value is not None else f"{key}=None"
+            for key, value in params.items()
+        ]
+    )
     template = Template(
-        "{% load django_twc_toolbox %} Query: {% query_string page=3 sort='name' %}"
+        f"{{% load django_twc_toolbox %}} Query: {{% query_string {param_string} %}}"
     )
 
-    rendered = template.render(RequestContext(request))
+    rendered = template.render(RequestContext(request, params))
 
-    assert "Query: ?filter=active&page=3&sort=name" in rendered
+    assert f"Query: {expected}" in rendered
