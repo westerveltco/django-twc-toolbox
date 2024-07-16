@@ -59,7 +59,7 @@ class Command(BaseCommand):
         if source_file is None:
             self.stdout.write(self.style.ERROR("Source Template doesn't exist"))
             return
-        base_dir = settings.BASE_DIR  # type: ignore[misc]
+        base_dir = Path(settings.BASE_DIR)  # type: ignore[misc]
         # 4. if destination, then create Path object and copy
         if destination is not None:
             app_config = apps.get_app_config(destination)
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 destination_path = template_dir / source
             except IndexError:
                 # 6/ otherwise create project level template directory and dump file there.
-                destination_path = Path(settings.BASE_DIR) / "templates" / source
+                destination_path = base_dir / "templates" / source
                 # PRINT what settings need to be modified
                 self.stdout.write(
                     self.style.WARNING(
