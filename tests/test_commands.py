@@ -25,6 +25,23 @@ def test_createsuperuser():
     assert user.check_password("password")
 
 
+@override_settings(DEBUG=True)
+def test_createsuperuser_update_email():
+    user = baker.make("User", is_superuser=True, email="test@example.com")
+
+    with patch.dict(os.environ, {"DJANGO_SUPERUSER_PASSWORD": "password"}):
+        call_command(
+            "createsuperuser",
+            interactive=False,
+            username=user.username,
+            email="updated@example.com",
+        )
+
+    user.refresh_from_db()
+
+    assert user.email == "updated@example.com"
+
+
 @override_settings(DEBUG=False)
 def test_createsuperuser_not_debug():
     user = baker.make("User", is_superuser=True)

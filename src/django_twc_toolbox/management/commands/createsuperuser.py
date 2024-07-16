@@ -20,8 +20,14 @@ class Command(createsuperuser.Command):
                 raise err
 
             User = get_user_model()
+
             username = options[User.USERNAME_FIELD]
-            password = os.environ["DJANGO_SUPERUSER_PASSWORD"]
             user = User.objects.get(username=username)
+
+            password = os.environ["DJANGO_SUPERUSER_PASSWORD"]
             user.set_password(password)
+
+            if email := options[User.EMAIL_FIELD]:
+                user.email = email
+
             user.save()
