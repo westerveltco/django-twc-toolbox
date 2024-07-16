@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import logging
 
+import pytest
 from django.conf import settings
+from django.http import HttpRequest
 
 from .settings import DEFAULT_SETTINGS
 
@@ -23,5 +25,16 @@ TEST_SETTINGS = {
         "django.contrib.contenttypes",
         "simple_history",
         "tests.dummy",
-    ]
+    ],
+    "TEMPLATES": [
+        {
+            "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "APP_DIRS": True,
+        }
+    ],
 }
+
+
+@pytest.fixture
+def req():
+    return HttpRequest()
