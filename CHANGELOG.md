@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added `list_templates` management command, inspired by [this post](https://noumenal.es/notes/tailwind/django-integration/) from Carlton Gibson ([@carltongibson](https://github.com/carltongibson)).
+
 ## [0.6.0]
 
 ### Added
