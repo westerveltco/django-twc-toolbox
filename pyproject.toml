@@ -118,7 +118,10 @@ path = "src/django_twc_toolbox/__init__.py"
 
 [tool.mypy]
 check_untyped_defs = true
-exclude = "docs/.*\\.py$"
+exclude = [
+    "docs/.*\\.py$",
+    "tests/.*\\.py$"
+]
 mypy_path = "src/"
 no_implicit_optional = true
 plugins = ["mypy_django_plugin.main"]
