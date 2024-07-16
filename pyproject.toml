@@ -119,8 +119,11 @@ path = "src/django_twc_toolbox/__init__.py"
 [tool.mypy]
 check_untyped_defs = true
 exclude = [
-  "docs/.*\\.py$",
-  "tests/.*\\.py$"
+  "docs",
+  "tests",
+  "migrations",
+  "venv",
+  ".venv",
 ]
 mypy_path = "src/"
 no_implicit_optional = true
@@ -132,7 +135,11 @@ warn_unused_ignores = true
 [[tool.mypy.overrides]]
 ignore_errors = true
 ignore_missing_imports = true
-module = ["django_twc_toolbox.*.migrations.*", "tests.*"]
+module = [
+  "*.migrations.*",
+  "tests.*",
+  "docs.*",
+]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
