@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.7.0]
+
 ### Added
 
 - Added `list_templates` management command, inspired by [this post](https://noumenal.es/notes/tailwind/django-integration/) from Carlton Gibson ([@carltongibson](https://github.com/carltongibson)).
@@ -106,7 +108,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.7.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -115,3 +117,4 @@ Initial release!
 [0.4.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.4.0
 [0.5.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.5.0
 [0.6.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.6.0
+[0.7.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.7.0
