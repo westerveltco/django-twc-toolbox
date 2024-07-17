@@ -22,6 +22,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Added `list_templates` management command, inspired by [this post](https://noumenal.es/notes/tailwind/django-integration/) from Carlton Gibson ([@carltongibson](https://github.com/carltongibson)).
 - Added `copy_template` management command, taken from [this project](https://github.com/softwarecrafts/django-cptemplate) by Andrew Miller ([@nanorepublica](https://github.com/nanorepublica)).
+- Added `ruff` to dev dependency extras.
 
 ## [0.6.0]
 
