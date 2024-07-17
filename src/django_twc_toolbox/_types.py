@@ -7,8 +7,8 @@ from django.db.models.base import Model
 
 if sys.version_info >= (3, 10):
     from typing import TypeAlias
-else:
-    from typing_extensions import TypeAlias
+else:  # pragma: no cover
+    from typing_extensions import TypeAlias  # pyright: ignore[reportUnreachable]
 
 
 _K = TypeVar("_K")
@@ -24,3 +24,13 @@ else:
 
 ChildModelT = TypeVar("ChildModelT", bound=Model)
 ParentModelT = TypeVar("ParentModelT", bound=Model)
+
+
+if sys.version_info >= (3, 12):
+    from typing import override as typing_override
+else:  # pragma: no cover
+    from typing_extensions import (
+        override as typing_override,  # pyright: ignore[reportUnreachable]
+    )
+
+override = typing_override
