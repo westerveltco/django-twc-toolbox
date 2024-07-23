@@ -108,7 +108,7 @@ class CRUDView(View):
     def render_to_response(self) -> TemplateResponse: ...
     @override
     @classmethod
-    def as_view(  # pyright: ignore[reportIncompatibleMethodOverride]
+    def as_view(  # type: ignore[override]
         cls, role: Role, **initkwargs: _TObject
     ) -> Callable[..., HttpResponse]: ...
     url_base: classproperty[str] | ClassVar[str]
