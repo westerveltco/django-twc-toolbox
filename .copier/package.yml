@@ -3,9 +3,8 @@ _commit: v2024.17
 _src_path: gh:westerveltco/django-twc-package
 author_email: josh@joshthomas.dev
 author_name: Josh Thomas
-current_version: 0.7.0
+current_version: 0.8.0
 django_versions:
-- '3.2'
 - '4.2'
 - '5.0'
 docs_domain: westervelt.dev
@@ -15,8 +14,6 @@ module_name: django_twc_toolbox
 package_description: Various tools for Django projects at The Westervelt Company.
 package_name: django-twc-toolbox
 python_versions:
-- '3.8'
-- '3.9'
 - '3.10'
 - '3.11'
 - '3.12'

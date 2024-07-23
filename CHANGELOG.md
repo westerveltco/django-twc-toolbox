@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.8.0]
+
 ### Added
 
 - Added `django_twc_toolbox.crud` app. Previously, we were maintaining a fork with a handful of customizations on top. The maintenance burden of keeping our fork updated with upstream has proven to be too much of a time commitment, so we are moving what little we have overridden here.
@@ -119,7 +121,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.7.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.8.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -129,3 +131,4 @@ Initial release!
 [0.5.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.5.0
 [0.6.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.6.0
 [0.7.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.7.0
+[0.8.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.8.0
