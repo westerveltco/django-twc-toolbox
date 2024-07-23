@@ -7,29 +7,38 @@ from django.utils import timezone
 from django.views.decorators.cache import cache_control
 from django.views.decorators.http import require_GET
 
+from .conf import app_settings
+
 
 def custom_error_404(
-    request: HttpRequest, exception: Exception | None = None, *args, **kwargs
+    request: HttpRequest,
+    exception: Exception | None = None,
+    *args: object,
+    **kwargs: object,
 ) -> HttpResponse:
-    return render(request, "404.html", context={}, status=404)
+    return render(request, app_settings.TEMPLATE_404, context={}, status=404)
 
 
-def custom_error_500(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-    return render(request, "500.html", context={}, status=500)
+def custom_error_500(
+    request: HttpRequest, *args: object, **kwargs: object
+) -> HttpResponse:
+    return render(request, app_settings.TEMPLATE_500, context={}, status=500)
 
 
 @require_GET
-@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+@cache_control(max_age=app_settings.CACHE_TIME_ROBOTS_TXT, immutable=True, public=True)
 def robots_txt(request: HttpRequest) -> HttpResponse:
-    return render(request, "robots.txt", content_type="text/plain")
+    return render(request, app_settings.TEMPLATE_ROBOTS_TXT, content_type="text/plain")
 
 
 @require_GET
-@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # one day
+@cache_control(
+    max_age=app_settings.CACHE_TIME_SECURITY_TXT, immutable=True, public=True
+)
 def security_txt(request: HttpRequest) -> HttpResponse:
     return render(
         request,
-        ".well-known/security.txt",
+        app_settings.TEMPLATE_SECURITY_TXT,
         context={
             "year": timezone.now().year + 1,
         },
