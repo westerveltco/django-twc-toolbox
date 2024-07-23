@@ -10,7 +10,11 @@ from django.template import RequestContext
 from django.template import Template
 from model_bakery import baker
 
-from django_twc_toolbox.templatetags.django_twc_toolbox import display_name
+from django_twc_toolbox.templatetags.django_twc_toolbox import (
+    class_name,
+    display_name,
+    klass,
+)
 from django_twc_toolbox.templatetags.django_twc_toolbox import elided_page_range
 from django_twc_toolbox.templatetags.django_twc_toolbox import initials
 from django_twc_toolbox.templatetags.django_twc_toolbox import query_string
@@ -218,3 +222,35 @@ def test_query_string_templatetag(url, params, expected, rf):
     rendered = template.render(RequestContext(request, params))
 
     assert f"Query: {expected}" in rendered
+
+
+def test_klass():
+    template = Template("")
+
+    result = klass(template)
+
+    assert result == Template
+
+
+def test_klass_templatetag():
+    template = Template("{% load django_twc_toolbox %} {{ template|klass }}")
+
+    rendered = template.render(Context({"template": template}))
+
+    assert "django.template.base.Template" in rendered
+
+
+def test_class_name():
+    template = Template("")
+
+    result = class_name(template)
+
+    assert result == "Template"
+
+
+def test_class_name_templatetag():
+    template = Template("{% load django_twc_toolbox %} {{ template|class_name }}")
+
+    rendered = template.render(Context({"template": template}))
+
+    assert "Template" in rendered
