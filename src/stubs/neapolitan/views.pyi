@@ -3,7 +3,7 @@
 import enum
 from collections.abc import Callable
 from collections.abc import Mapping
-from typing import Any
+from typing import Any  # pyright: ignore[reportAny]
 from typing import ClassVar
 from typing import List
 from typing import TypeVar
