@@ -25,6 +25,7 @@ TEST_SETTINGS = {
         "django.contrib.contenttypes",
         "simple_history",
         "tests.dummy",
+        "tests.test_crud",
     ],
     "TEMPLATES": [
         {
