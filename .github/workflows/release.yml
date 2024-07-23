@@ -48,7 +48,7 @@ jobs:
 
       - uses: westerveltco/setup-ci-action@v0
         with:
-          python-version: 3.12
+          python-version: "3.12"
           extra-python-dependencies: hatch
           use-uv: true
 

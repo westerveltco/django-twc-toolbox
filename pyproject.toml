@@ -14,8 +14,6 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -28,9 +26,10 @@ keywords = []
 license = {file = "LICENSE"}
 name = "django-twc-toolbox"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
+crud = ["neapolitan"]
 cuid = ["cuid", "django-charid-field"]
 dev = [
   "bumpver",
@@ -39,7 +38,7 @@ dev = [
   "coverage[toml]",
   "django-stubs",
   "django-stubs-ext",
-  "django-twc-toolbox[cuid,history]",
+  "django-twc-toolbox[crud,cuid,history]",
   "faker",
   "hatch",
   "mypy",
@@ -70,6 +69,14 @@ sentry = ["sentry-sdk[django]"]
 Documentation = "https://django-twc-toolbox.westervelt.dev/"
 Issues = "https://github.com/westerveltco/django-twc-toolbox/issues"
 Source = "https://github.com/westerveltco/django-twc-toolbox"
+
+[tool.basedpyright]
+exclude = [
+  "**/node_modules",
+  "**/__pycache__"
+]
+include = ["src"]
+stubPath = "src/stubs"
 
 [tool.bumpver]
 commit = true

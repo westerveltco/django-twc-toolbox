@@ -1,0 +1,36 @@
+<div class="flow-root mt-8">
+  <div class="overflow-x-auto -my-2 -mx-4 sm:-mx-6 lg:-mx-8">
+    <div class="inline-block py-2 min-w-full align-middle sm:px-6 lg:px-8">
+      <table class="min-w-full divide-y divide-gray-300">
+        <thead>
+          <tr>
+            {% for header in headers %}
+              <th scope="col"
+                  class="py-3.5 px-3 text-sm font-semibold text-left text-gray-900">{{ header|capfirst }}</th>
+            {% endfor %}
+            <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+              <span class="sr-only">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          {% for object in object_list %}
+            <tr>
+              {% for field in object.fields %}
+                <td class="py-3.5 px-3 {% if forloop.first %} font-medium text-gray-900 {% else %} text-gray-500 {% endif %} ">
+                  {{ field.value }}
+                </td>
+              {% endfor %}
+              <td class="py-3.5 px-3 text-right text-sm font-medium [&_a]:text-indigo-600 [&_a:hover]:text-indigo-900">
+                {% for action in object.actions %}
+                  <a href="{{ action.url }}">{{ action.text }}</a>
+                  {% if not forloop.last %}|{% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
