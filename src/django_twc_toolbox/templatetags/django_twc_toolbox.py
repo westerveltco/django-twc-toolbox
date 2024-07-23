@@ -88,8 +88,11 @@ def query_string(context, query_dict=None, **kwargs):
     return f"?{query_string}"
 
 
+_T = TypeVar("_T")
+
+
 @register.filter
-def klass(instance: object) -> str:
+def klass(instance: _T) -> type[_T]:
     return instance.__class__
 
 
