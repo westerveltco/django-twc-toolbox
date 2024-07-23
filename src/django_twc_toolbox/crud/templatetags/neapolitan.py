@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Generator
 from collections.abc import Sequence
+from typing import cast
 
 from django import template
 from django.db import models
@@ -48,7 +49,7 @@ def object_detail(object: models.Model, view: CRUDView):
     def iter() -> Generator[tuple[str, str], None, None]:
         for f in fields:
             mf = object._meta.get_field(f)
-            yield (mf.verbose_name, str(getattr(object, f)))
+            yield (cast(str, mf.verbose_name), str(getattr(object, f)))  # type: ignore[union-attr]
 
     return {"object": iter()}
 
@@ -67,7 +68,7 @@ def object_list(objects: Sequence[models.Model], view: CRUDView):
     """
 
     fields = view.get_fields()
-    headers = [objects[0]._meta.get_field(f).verbose_name for f in fields]
+    headers = [cast(str, objects[0]._meta.get_field(f).verbose_name) for f in fields]  # type: ignore[union-attr]
     object_list = [
         {
             "object": object,
