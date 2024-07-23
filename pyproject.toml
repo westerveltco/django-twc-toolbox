@@ -38,7 +38,7 @@ dev = [
   "coverage[toml]",
   "django-stubs",
   "django-stubs-ext",
-  "django-twc-toolbox[crud,cuid,history]",
+  "django-twc-toolbox[crud,cuid,history,sentry]",
   "faker",
   "hatch",
   "mypy",
