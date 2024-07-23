@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Two new templatetag filters: `{{ variable|klass }}` and `{{ variable|class_name }}`.
+
 ### Fixed
 
 - Functions in `django_twc_toolbox.sentry` now correctly type hinted.
