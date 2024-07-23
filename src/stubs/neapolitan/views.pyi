@@ -1,8 +1,11 @@
+# pyright: reportDeprecated=false
+# ruff: noqa: UP006
 import enum
 from collections.abc import Callable
 from collections.abc import Mapping
 from typing import Any
 from typing import ClassVar
+from typing import List
 from typing import TypeVar
 from typing import override
 
@@ -40,12 +43,11 @@ class Role(enum.Enum):
 
 _TModel = TypeVar("_TModel", bound=models.Model)
 _TObject = object
-_TList = list
 
 class CRUDView(View):
     role: Role
     model: ClassVar[type[models.Model] | None] = None
-    fields: ClassVar[_TList[str] | None] = None
+    fields: ClassVar[List[str] | None] = None
 
     lookup_field: ClassVar[str]
     lookup_url_kwarg: ClassVar[str | None] = None
@@ -105,7 +107,7 @@ class CRUDView(View):
     ) -> Any: ...  # TODO: change Any to FilterSet
     def get_context_object_name(self, is_list: bool = False) -> str | None: ...
     def get_context_data(self, **kwargs: _TObject) -> dict[str, _TObject]: ...
-    def get_template_names(self) -> _TList[str]: ...
+    def get_template_names(self) -> List[str]: ...
     def render_to_response(self) -> TemplateResponse: ...
     @override
     @classmethod
@@ -114,4 +116,4 @@ class CRUDView(View):
     ) -> Callable[..., HttpResponse]: ...
     url_base: classproperty[str] | ClassVar[str]
     @classonlymethod
-    def get_urls(cls, roles: _TList[Role] | None = None) -> _TList[URLPattern]: ...
+    def get_urls(cls, roles: List[Role] | None = None) -> List[URLPattern]: ...
