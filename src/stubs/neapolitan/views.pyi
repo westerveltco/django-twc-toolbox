@@ -39,6 +39,7 @@ class Role(enum.Enum):
     ) -> str | None: ...
 
 _TModel = TypeVar("_TModel", bound=models.Model)
+_TObject = object
 
 class CRUDView(View):
     role: Role
@@ -62,31 +63,31 @@ class CRUDView(View):
     template_name_suffix: ClassVar[str | None] = None
 
     def list(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> TemplateResponse: ...
     def detail(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> TemplateResponse: ...
     def show_form(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> TemplateResponse: ...
     def process_form(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> HttpResponse | HttpResponseRedirect: ...
     def confirm_delete(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> TemplateResponse: ...
     def process_deletion(
-        self, request: HttpRequest, *args: object, **kwargs: object
+        self, request: HttpRequest, *args: _TObject, **kwargs: _TObject
     ) -> TemplateResponse: ...
     def get_queryset(self) -> models.QuerySet[models.Model]: ...
     def get_object(self) -> models.Model: ...
     def get_form_class(self) -> type[forms.Form]: ...
     def get_form(
         self,
-        data: Mapping[str, object] | None = None,
+        data: Mapping[str, _TObject] | None = None,
         files: MultiValueDict[str, UploadedFile] | None = None,
-        **kwargs: object,
+        **kwargs: _TObject,
     ) -> forms.Form: ...
     def form_valid(self, form: forms.Form) -> HttpResponseRedirect: ...
     def form_invalid(self, form: forms.Form) -> HttpResponse: ...
@@ -102,13 +103,13 @@ class CRUDView(View):
         self, queryset: models.QuerySet[models.Model] | None = None
     ) -> Any: ...  # TODO: change Any to FilterSet
     def get_context_object_name(self, is_list: bool = False) -> str | None: ...
-    def get_context_data(self, **kwargs: object) -> dict[str, object]: ...
+    def get_context_data(self, **kwargs: _TObject) -> dict[str, _TObject]: ...
     def get_template_names(self) -> list[str]: ...
     def render_to_response(self) -> TemplateResponse: ...
     @override
     @classmethod
     def as_view(  # pyright: ignore[reportIncompatibleMethodOverride]
-        cls, role: Role, **initkwargs: object
+        cls, role: Role, **initkwargs: _TObject
     ) -> Callable[..., HttpResponse]: ...
     url_base: classproperty[str] | ClassVar[str]
     @classonlymethod
