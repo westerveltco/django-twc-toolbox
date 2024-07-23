@@ -10,13 +10,11 @@ from django.template import RequestContext
 from django.template import Template
 from model_bakery import baker
 
-from django_twc_toolbox.templatetags.django_twc_toolbox import (
-    class_name,
-    display_name,
-    klass,
-)
+from django_twc_toolbox.templatetags.django_twc_toolbox import class_name
+from django_twc_toolbox.templatetags.django_twc_toolbox import display_name
 from django_twc_toolbox.templatetags.django_twc_toolbox import elided_page_range
 from django_twc_toolbox.templatetags.django_twc_toolbox import initials
+from django_twc_toolbox.templatetags.django_twc_toolbox import klass
 from django_twc_toolbox.templatetags.django_twc_toolbox import query_string
 
 pytestmark = pytest.mark.django_db
