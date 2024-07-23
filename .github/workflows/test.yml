@@ -25,7 +25,7 @@ jobs:
 
       - uses: westerveltco/setup-ci-action@v0
         with:
-          python-version: 3.10
+          python-version: "3.10"
           extra-python-dependencies: nox
           use-uv: true
 
@@ -76,7 +76,7 @@ jobs:
 
       - uses: westerveltco/setup-ci-action@v0
         with:
-          python-version: 3.12
+          python-version: "3.12"
           extra-python-dependencies: nox
           use-uv: true
 
@@ -93,7 +93,7 @@ jobs:
 
       - uses: westerveltco/setup-ci-action@v0
         with:
-          python-version: 3.10
+          python-version: "3.10"
           extra-python-dependencies: nox
           use-uv: true
 
