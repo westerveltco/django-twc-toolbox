@@ -86,3 +86,13 @@ def query_string(context, query_dict=None, **kwargs):
         return ""
     query_string = query_dict.urlencode()
     return f"?{query_string}"
+
+
+@register.filter
+def klass(instance: object) -> str:
+    return instance.__class__
+
+
+@register.filter
+def class_name(instance: object) -> str:
+    return instance.__class__.__name__
