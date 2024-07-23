@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Functions in `django_twc_toolbox.sentry` now correctly type hinted.
+
 ## [0.8.0]
 
 ### Added
