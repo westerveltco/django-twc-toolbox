@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from sentry_sdk._types import SamplingContext
+from typing import TYPE_CHECKING
 
 from django_twc_toolbox.conf import app_settings
+
+if TYPE_CHECKING:
+    from sentry_sdk._types import SamplingContext
 
 
 def sentry_traces_sampler(sampling_context: SamplingContext):
