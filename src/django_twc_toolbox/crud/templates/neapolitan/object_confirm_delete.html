@@ -3,7 +3,7 @@
   <h1>Are you sure you want to delete following {{ object_verbose_name }}?</h1>
   <p class="mt-4">{{ object }}</p>
   <div class="m-8">
-    <form method="POST" action="{{ delete_view_url }}">
+    <form method="post" action="{{ delete_view_url }}">
       {% csrf_token %}
       {{ form }}
       <button type="submit"
@@ -12,4 +12,4 @@
       </button>
     </form>
   </div>
-{% endblock %}
+{% endblock content %}
