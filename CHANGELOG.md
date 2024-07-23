@@ -23,6 +23,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 - Added `django_twc_toolbox.crud` app. Previously, we were maintaining a fork with a handful of customizations on top. The maintenance burden of keeping our fork updated with upstream has proven to be too much of a time commitment, so we are moving what little we have overridden here.
   - Includes a `CRUDView` that inherits from `neapolitan.views.CRUDView` with a few extra urls thrown in the template context, as well as the ability to specify different fields for the list and detail views.
   - `neapolitan.templatetags.neapolitan` is being shadowed allowing both `{% object_detail %}` and `{% object_list %}` to use our `CRUDView`'s ability to use different fields (as mentioned above), as well as return the string version of any related `Model`. (`neapolitan` itself returns a `Model` instance's primary key.) Additionally, the action links for the list view are a dictionary instead of a rendered string.
+- Added a handful of core views: 404 and 500 error handling views and `robots.txt` and `.well-known/security.txt` views.
 
 ### Removed
 
