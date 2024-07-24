@@ -69,6 +69,23 @@ class CRUDView(NeapolitanCRUDView):
             raise Http404
 
         if self.table_class is not None:
+            # This is the only part that is changed from the `neapolitan.views.CRUDView` parent class.
+            #
+            # If `table_class` is set, that means the view class has `SingleTableMixin` in it's inheritance
+            # chain[^1]. `neapolitan.views.CRUDView.get_paginate_by` does not take an argument, whereas
+            # `django_tables2.views.SingleTableMixin.get_paginate_by` expects one (`table_data`), so we need
+            # to pass in an argument so the view doesn't crash.
+            #
+            # Now, mind you, `SingleTableMixin.get_paginate_by` doesn't actually **do** anything with that
+            # argument, so it's a bit useless. But 🤷 whatareyagonnado?
+            #
+            # I have opened an issue on neapolitan to add the ability for `CRUDView.get_paginate_by` to take
+            # arbitrary args and kwargs by adding `*args, **kwargs`. I may also open an issue on django-tables2
+            # to add `None` to the `table_data` argument in `SingleTableMixin.get_paginate_by` since it's unused
+            # and presumably only put there to allow people to override and customize?
+            #
+            # [^1]: Inheritance chain? Is that the correct terminology? Probably not, but you get the idea.
+
             paginate_by = self.get_paginate_by(queryset)  # type: ignore[call-arg,reportCallIssue,reportUnknownVariableType]
         else:
             paginate_by = self.get_paginate_by()
@@ -112,7 +129,7 @@ class CRUDView(NeapolitanCRUDView):
     ) -> Callable[..., HttpResponse]:
         # Check if the list view is being called OR the list view is being called and there is no
         # `table_class` attribute set. If not, we can just return the parent
-        # `neapolitan.views.CRUDView.as_view` to render as normal.
+        # `neapolitan.views.CRUDView.as_view` method to render as normal.
 
         if role != Role.LIST or cls.table_class is None:
             return super().as_view(role=role, **initkwargs)
@@ -126,7 +143,8 @@ class CRUDView(NeapolitanCRUDView):
         #
         # We don't need to change anything else about the class (there's already some small logic around
         # dealing with pagination in the `list` method above), so we can get away with just adding the mixin,
-        # inheriting from `cls` a.k.a. `CRUDView`, and leaving the body of the new view class empty (`...`).
+        # inheriting from `cls` a.k.a. `neapolitan.views.CRUDView`, and leaving the body of the new view
+        # class empty (`...`).
         #
         # Also need to pass in the class variable `table_class` to the `as_view` class method so it's available
         # on the instance.
