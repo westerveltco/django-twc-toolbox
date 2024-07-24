@@ -145,6 +145,12 @@ def test_as_view_table_class():
     assert issubclass(view.view_class, SingleTableMixin)
 
 
+def test_as_view_no_table_class():
+    view = BookmarkView.as_view(role=Role.LIST)
+
+    assert not issubclass(view.view_class, SingleTableMixin)
+
+
 @pytest.mark.parametrize(
     "klass,expected",
     [
