@@ -30,6 +30,8 @@ class CRUDView(NeapolitanCRUDView):
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
 
+    list_partial_id: ClassVar[str] = "object-list"
+
     def get_fields(self):
         match self.role:
             case Role.DETAIL:
@@ -121,6 +123,19 @@ class CRUDView(NeapolitanCRUDView):
             context["detail_view_url"] = Role.DETAIL.maybe_reverse(self, self.object)
             context["update_view_url"] = Role.UPDATE.maybe_reverse(self, self.object)
         return context
+
+    @override
+    def get_template_names(self):
+        template_names = super().get_template_names()
+        if (
+            self.role == Role.LIST
+            and hasattr(self.request, "htmx")
+            and not self.request.GET.get("page", None)
+        ):
+            template_names = [
+                f"{template_name}#object-list" for template_name in template_names
+            ]
+        return template_names
 
     @classmethod
     @override
