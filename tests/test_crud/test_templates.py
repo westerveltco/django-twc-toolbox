@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-from django.conf import settings
 from model_bakery import baker
 from neapolitan.views import Role
 
@@ -38,8 +37,6 @@ def test_rendered_partial_template(rf, db):
     request.htmx = True
     baker.make(Bookmark, _quantity=3)
 
-    print(f"{settings.TEMPLATES=}")
-
     response = view_func(request)
     rendered = response.render()
     content = rendered.content.decode()
@@ -58,8 +55,6 @@ def test_rendered_partial_template_different_target(rf, db):
     request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
     request.htmx = True
     baker.make(Bookmark, _quantity=3)
-
-    print(f"{settings.TEMPLATES=}")
 
     response = view_func(request)
     rendered = response.render()
