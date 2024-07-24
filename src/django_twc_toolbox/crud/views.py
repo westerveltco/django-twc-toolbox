@@ -143,8 +143,8 @@ class CRUDView(NeapolitanCRUDView):
         #
         # We don't need to change anything else about the class (there's already some small logic around
         # dealing with pagination in the `list` method above), so we can get away with just adding the mixin,
-        # inheriting from `cls` a.k.a. `neapolitan.views.CRUDView`, and leaving the body of the new view
-        # class empty (`...`).
+        # inheriting from `cls` a.k.a. `django_twc_toolbox.crud.views.CRUDView`, and leaving the body of the
+        # new view class empty (`...`).
         #
         # Also need to pass in the class variable `table_class` to the `as_view` class method so it's available
         # on the instance.
