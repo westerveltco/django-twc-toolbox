@@ -86,7 +86,7 @@ class CRUDView(NeapolitanCRUDView):
             #
             # [^1]: Inheritance chain? Is that the correct terminology? Probably not, but you get the idea.
 
-            paginate_by = self.get_paginate_by(queryset)  # type: ignore[call-arg,reportCallIssue,reportUnknownVariableType]
+            paginate_by = self.get_paginate_by(queryset)  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue,reportUnknownVariableType]
         else:
             paginate_by = self.get_paginate_by()
 
@@ -144,7 +144,7 @@ class CRUDView(NeapolitanCRUDView):
         # We don't need to change anything else about the class (there's already some small logic around
         # dealing with pagination in the `list` method above), so we can get away with just adding the mixin,
         # inheriting from `cls` a.k.a. `django_twc_toolbox.crud.views.CRUDView`, and leaving the body of the
-        # new view class empty (`...`).
+        # new view        # class empty (`...`).
         #
         # Also need to pass in the class variable `table_class` to the `as_view` class method so it's available
         # on the instance.
