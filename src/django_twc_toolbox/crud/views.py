@@ -69,7 +69,7 @@ class CRUDView(NeapolitanCRUDView):
             raise Http404
 
         if self.table_class is not None:
-            paginate_by = self.get_paginate_by(self.object_list)
+            paginate_by = self.get_paginate_by(queryset)  # pyright: ignore[reportCallIssue,reportUnknownVariableType]
         else:
             paginate_by = self.get_paginate_by()
 

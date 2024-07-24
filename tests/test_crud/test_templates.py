@@ -28,5 +28,4 @@ def test_rendered_template_table(klass, expected, rf, db):
     rendered = response.render()
     content = rendered.content.decode()
 
-    print(f"{content=}")
-    assert ('<div class="flow-root mt-8"' in content) is expected
+    assert ("<h1>With Table</h1>" in content) is expected
