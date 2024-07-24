@@ -158,6 +158,7 @@ class CRUDView(NeapolitanCRUDView):
         if (
             self.role == Role.LIST
             and getattr(self.request, "htmx", False)
+            and self.request.htmx
             and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
             and not self.request.GET.get(self.page_kwarg, None)
         ):
