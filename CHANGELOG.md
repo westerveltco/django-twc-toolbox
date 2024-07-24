@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed pagination and ordering of `CRUDView.object_list` when a `table_class` is provided.
+
 ## [0.9.2]
 
 ### Fixed
