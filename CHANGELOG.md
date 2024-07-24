@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.9.3]
+
 ### Fixed
 
 - Fixed pagination and ordering of `CRUDView.object_list` when a `table_class` is provided.
@@ -149,7 +151,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.9.2...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.9.3...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -163,3 +165,4 @@ Initial release!
 [0.9.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.0
 [0.9.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.1
 [0.9.2]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.2
+[0.9.3]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.3
