@@ -37,7 +37,7 @@ class CRUDView(NeapolitanCRUDView):
     #
     # ```htmldjango
     # {% load partials %}
-    # {% partialdef list_partial_id %}
+    # {% partialdef list_partial %}
     #   <h1>Hello World!</h1>
     # {% endpartialdef %}
     # ```
