@@ -7,6 +7,7 @@ from model_bakery import baker
 from neapolitan.views import Role
 
 from .models import Bookmark
+from .views import BookmarkTableOrderedView
 from .views import BookmarkTableView
 from .views import BookmarkView
 
@@ -196,3 +197,11 @@ def test_get_template_names_no_htmx(rf):
 
     assert "neapolitan/object_list.html" in template_names
     assert "neapolitan/object_list.html#object-list" not in template_names
+
+
+def test_table_view_ordered(client, db):
+    baker.make(Bookmark, _quantity=3)
+
+    response = client.get(Role.LIST.maybe_reverse(BookmarkTableOrderedView))
+
+    assert response.status_code == 200

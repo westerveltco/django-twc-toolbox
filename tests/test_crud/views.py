@@ -22,9 +22,23 @@ class BookmarkTable(tables.Table):
 
 class BookmarkTableView(BookmarkView):
     table_class = BookmarkTable
+    url_base = "bookmarktable"
+
+
+class BookmarkTableOrdered(tables.Table):
+    class Meta:
+        model = Bookmark
+        order_by = "title"
+
+
+class BookmarkTableOrderedView(BookmarkView):
+    table_class = BookmarkTableOrdered
+    paginate_by = 1
+    url_base = "bookmarktableordered"
 
 
 urlpatterns = [
     *BookmarkView.get_urls(),
     *BookmarkTableView.get_urls(),
+    *BookmarkTableOrderedView.get_urls(),
 ]

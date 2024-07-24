@@ -90,23 +90,26 @@ class CRUDView(NeapolitanCRUDView):
         """GET handler for the list view."""
 
         queryset = self.get_queryset()
+
         filterset = self.get_filterset(queryset)
         if filterset is not None:
             queryset = filterset.qs
+
+        # set object_list up here instead of down in the `if paginate_by is None` checks
+        self.object_list = queryset
 
         if not self.allow_empty and not queryset.exists():
             raise Http404
 
         if self.table_class is not None:
-            # This is the only part that is changed from the `neapolitan.views.CRUDView` parent class.
-            #
             # If `table_class` is set, that means the view class has `SingleTableMixin` in it's inheritance
             # chain[^1]. `neapolitan.views.CRUDView.get_paginate_by` does not take an argument, whereas
             # `django_tables2.views.SingleTableMixin.get_paginate_by` expects one (`table_data`), so we need
             # to pass in an argument so the view doesn't crash.
             #
-            # Now, mind you, `SingleTableMixin.get_paginate_by` doesn't actually **do** anything with that
-            # argument, so it's a bit useless. But 🤷 whatareyagonnado?
+            # Now, mind you, `SingleTableMixin.get_paginate_by` doesn't appear actually **do** anything with
+            # that argument, so it seems like a bit of a useless thing. But 🤷 whatareyagonnado? I'm sure they
+            # have their reasons when they wrote it that way.
             #
             # I have opened an issue on neapolitan to add the ability for `CRUDView.get_paginate_by` to take
             # arbitrary args and kwargs by adding `*args, **kwargs`. I may also open an issue on django-tables2
@@ -115,13 +118,12 @@ class CRUDView(NeapolitanCRUDView):
             #
             # [^1]: Inheritance chain? Is that the correct terminology? Probably not, but you get the idea.
 
-            paginate_by = self.get_paginate_by(queryset)  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue,reportUnknownVariableType]
+            paginate_by = self.get_paginate_by(self.object_list)  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue,reportUnknownVariableType]
         else:
             paginate_by = self.get_paginate_by()
 
         if paginate_by is None:
             # Unpaginated response
-            self.object_list = queryset
             context = self.get_context_data(
                 page_obj=None,
                 is_paginated=False,
@@ -130,8 +132,7 @@ class CRUDView(NeapolitanCRUDView):
             )
         else:
             # Paginated response
-            page = self.paginate_queryset(queryset, paginate_by)
-            self.object_list = page.object_list
+            page = self.paginate_queryset(self.object_list, paginate_by)
             context = self.get_context_data(
                 page_obj=page,
                 is_paginated=page.has_other_pages(),
