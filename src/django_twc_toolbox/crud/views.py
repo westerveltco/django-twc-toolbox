@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Callable
 from typing import ClassVar
+from typing import Literal
 
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
@@ -30,7 +31,26 @@ class CRUDView(NeapolitanCRUDView):
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
 
-    list_partial_id: ClassVar[str] = "object-list"
+    # django-template-partials doesn't seem to be able to use a passed in context
+    # variable to define partials, e.g. with `list_partial_id = "object-list"`
+    # in the template context:
+    #
+    # ```htmldjango
+    # {% load partials %}
+    # {% partialdef list_partial_id %}
+    #   <h1>Hello World!</h1>
+    # {% endpartialdef %}
+    # ```
+    #
+    # This does not work, at least the different ways I've tried.
+    #
+    # However! I am including this class variable in the event I (or someone else)
+    # cracks the case and figures out how to get the templatetag to be able to take
+    # an outside variable.
+    #
+    # So the partial name within the `object_list.html` template MUST BE `object-list`,
+    # at least for the time being.
+    list_partial_id: ClassVar[Literal["object-list"]] = "object-list"
 
     def get_fields(self):
         match self.role:

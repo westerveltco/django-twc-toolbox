@@ -27,6 +27,7 @@ TEST_SETTINGS = {
         "django.contrib.contenttypes",
         "django_tables2",
         "simple_history",
+        "template_partials",
         "tests.dummy",
         "tests.test_crud",
     ],
@@ -34,10 +35,18 @@ TEST_SETTINGS = {
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
             "DIRS": [Path(__file__).parent / "templates"],
-            "APP_DIRS": True,
             "OPTIONS": {
                 "context_processors": [
                     "django.template.context_processors.request",
+                ],
+                "loaders": [
+                    (
+                        "template_partials.loader.Loader",
+                        [
+                            "django.template.loaders.filesystem.Loader",
+                            "django.template.loaders.app_directories.Loader",
+                        ],
+                    )
                 ],
             },
         }
