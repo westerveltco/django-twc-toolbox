@@ -157,7 +157,7 @@ class CRUDView(NeapolitanCRUDView):
         # pagination links, but for now we'll just render the entire template.
         if (
             self.role == Role.LIST
-            and hasattr(self.request, "htmx")
+            and getattr(self.request, "htmx", False)
             and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
             and not self.request.GET.get(self.page_kwarg, None)
         ):

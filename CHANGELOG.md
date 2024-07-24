@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Corrected check in `django_twc_toolbox.crud.CRUDView.get_template_names` for if an `HttpRequest` is an HTMX request or not.
+
 ## [0.9.0]
 
 ### Added
