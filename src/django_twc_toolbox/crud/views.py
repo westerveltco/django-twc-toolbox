@@ -147,10 +147,19 @@ class CRUDView(NeapolitanCRUDView):
     @override
     def get_template_names(self):
         template_names = super().get_template_names()
+        # only render the template partial if:
+        # - it's the list view
+        # - it's an HTMX request
+        # - it's not a pagniated request
+        #
+        # Right now, our custom templates do not have support for rendering template partials when
+        # dealing with paginated lists. We could probably update it to add an `hx-target` to the
+        # pagination links, but for now we'll just render the entire template.
         if (
             self.role == Role.LIST
             and hasattr(self.request, "htmx")
-            and not self.request.GET.get("page", None)
+            and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
+            and not self.request.GET.get(self.page_kwarg, None)
         ):
             template_names = [
                 f"{template_name}#{self.list_partial}"
