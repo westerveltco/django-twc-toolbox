@@ -133,7 +133,8 @@ class CRUDView(NeapolitanCRUDView):
             and not self.request.GET.get("page", None)
         ):
             template_names = [
-                f"{template_name}#object-list" for template_name in template_names
+                f"{template_name}#{self.list_partial_id}"
+                for template_name in template_names
             ]
         return template_names
 
