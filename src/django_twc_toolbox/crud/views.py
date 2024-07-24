@@ -1,3 +1,4 @@
+# pyright: reportUnnecessaryTypeIgnoreComment=false
 from __future__ import annotations
 
 import sys
@@ -62,12 +63,12 @@ class CRUDView(NeapolitanCRUDView):
 
     @classmethod
     @override
-    def as_view(
+    def as_view(  # type: ignore[override]
         cls, role: Role, **initkwargs: object
     ) -> Callable[..., HttpResponseBase]:
         if role != Role.LIST or cls.table_class is None:
             return super().as_view(role=role, **initkwargs)
 
-        class ListViewWithTable(SingleTableMixin, cls): ...  # pyright: ignore[reportIncompatibleMethodOverride]
+        class ListViewWithTable(SingleTableMixin, cls): ...  # type: ignore[misc,valid-type]
 
         return ListViewWithTable.as_view(role=role, **initkwargs)
