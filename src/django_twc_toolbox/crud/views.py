@@ -32,7 +32,7 @@ class CRUDView(NeapolitanCRUDView):
     table_data: ClassVar[dict[str, object] | None] = None
 
     # django-template-partials doesn't seem to be able to use a passed in context
-    # variable to define partials, e.g. with `list_partial_id = "object-list"`
+    # variable to define partials, e.g. with `list_partial = "object-list"`
     # in the template context:
     #
     # ```htmldjango
@@ -50,7 +50,7 @@ class CRUDView(NeapolitanCRUDView):
     #
     # So the partial name within the `object_list.html` template MUST BE `object-list`,
     # at least for the time being.
-    list_partial_id: ClassVar[Literal["object-list"]] = "object-list"
+    list_partial: ClassVar[Literal["object-list"]] = "object-list"
 
     def get_fields(self):
         match self.role:
@@ -153,7 +153,7 @@ class CRUDView(NeapolitanCRUDView):
             and not self.request.GET.get("page", None)
         ):
             template_names = [
-                f"{template_name}#{self.list_partial_id}"
+                f"{template_name}#{self.list_partial}"
                 for template_name in template_names
             ]
         return template_names

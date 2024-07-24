@@ -50,7 +50,7 @@ def test_rendered_partial_template(rf, db):
 )
 def test_rendered_partial_template_different_target(rf, db):
     view_func = BookmarkView.as_view(
-        role=Role.LIST, list_partial_id="test_different_target"
+        role=Role.LIST, list_partial="test_different_target"
     )
     request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
     request.htmx = True
