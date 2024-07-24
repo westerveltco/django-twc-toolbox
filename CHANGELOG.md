@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.9.1]
+
 ### Fixed
 
 - Corrected check in `django_twc_toolbox.crud.CRUDView.get_template_names` for if an `HttpRequest` is an HTMX request or not.
@@ -137,7 +139,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.9.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.9.1...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -149,3 +151,4 @@ Initial release!
 [0.7.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.7.0
 [0.8.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.8.0
 [0.9.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.0
+[0.9.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.1
