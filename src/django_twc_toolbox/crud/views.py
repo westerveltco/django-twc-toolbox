@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Callable
 from typing import ClassVar
+from typing import Literal
 
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
@@ -29,6 +30,27 @@ class CRUDView(NeapolitanCRUDView):
 
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
+
+    # django-template-partials doesn't seem to be able to use a passed in context
+    # variable to define partials, e.g. with `list_partial = "object-list"`
+    # in the template context:
+    #
+    # ```htmldjango
+    # {% load partials %}
+    # {% partialdef list_partial %}
+    #   <h1>Hello World!</h1>
+    # {% endpartialdef %}
+    # ```
+    #
+    # This does not work, at least the different ways I've tried.
+    #
+    # However! I am including this class variable in the event I (or someone else)
+    # cracks the case and figures out how to get the templatetag to be able to take
+    # an outside variable.
+    #
+    # So the partial name within the `object_list.html` template MUST BE `object-list`,
+    # at least for the time being.
+    list_partial: ClassVar[Literal["object-list"]] = "object-list"
 
     def get_fields(self):
         match self.role:
@@ -121,6 +143,29 @@ class CRUDView(NeapolitanCRUDView):
             context["detail_view_url"] = Role.DETAIL.maybe_reverse(self, self.object)
             context["update_view_url"] = Role.UPDATE.maybe_reverse(self, self.object)
         return context
+
+    @override
+    def get_template_names(self):
+        template_names = super().get_template_names()
+        # only render the template partial if:
+        # - it's the list view
+        # - it's an HTMX request
+        # - it's not a paginated request
+        #
+        # Right now, our custom templates do not have support for rendering template partials when
+        # dealing with paginated lists. We could probably update it to add an `hx-target` to the
+        # pagination links, but for now we'll just render the entire template.
+        if (
+            self.role == Role.LIST
+            and hasattr(self.request, "htmx")
+            and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
+            and not self.request.GET.get(self.page_kwarg, None)
+        ):
+            template_names = [
+                f"{template_name}#{self.list_partial}"
+                for template_name in template_names
+            ]
+        return template_names
 
     @classmethod
     @override

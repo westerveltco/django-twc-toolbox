@@ -22,6 +22,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Two new templatetag filters: `{{ variable|klass }}` and `{{ variable|class_name }}`.
 - Support for using django-tables2 with `django_twc_toolbox.crud.CRUDView`. The view now has the option to set `table_class` and `table_data` class attributes that will render the table on the list page using django-tables2.
+- Support for template partials in `django_twc_toolbox.crud.CRUDView`, using django-template-partials.
 
 ### Fixed
 

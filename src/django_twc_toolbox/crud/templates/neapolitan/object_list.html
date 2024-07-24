@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load neapolitan %}
+{% load partials %}
 {% load render_table from django_tables2 %}
 
 {% block content %}
@@ -11,14 +12,18 @@
          href="{{ create_view_url }}">Add a new {{ object_verbose_name }}</a>
     </div>
   </div>
-  {% if object_list %}
-    {% if table %}
-      {% render_table table %}
+
+  {% partialdef object-list inline=True %}
+    {% if object_list %}
+      {% if table %}
+        {% render_table table %}
+      {% else %}
+        {% object_list object_list view %}
+      {% endif %}
     {% else %}
-      {% object_list object_list view %}
+      <p class="mt-8">There are no {{ object_verbose_name_plural }}. Create one now?</p>
     {% endif %}
-  {% else %}
-    <p class="mt-8">There are no {{ object_verbose_name_plural }}. Create one now?</p>
-  {% endif %}
+  {% endpartialdef %}
+
   <hr>
 {% endblock content %}

@@ -62,7 +62,7 @@ class CRUDView(View):
     context_object_name: ClassVar[str | None] = None
 
     paginate_by: ClassVar[int | None] = None
-    page_kwargs: ClassVar[str] = "page"
+    page_kwarg: ClassVar[str] = "page"
     allow_empty: ClassVar[bool] = True
 
     template_name_suffix: ClassVar[str | None] = None
