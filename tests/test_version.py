@@ -4,4 +4,4 @@ from django_twc_toolbox import __version__
 
 
 def test_version():
-    assert __version__ == "0.9.0"
+    assert __version__ == "0.9.1"
