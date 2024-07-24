@@ -7,7 +7,7 @@ TableData = dict[str, object]
 class TableMixinBase:
     context_table_name: ClassVar[str]
     table_pagination: bool | dict[str, object] | None
-    def get_paginate_by(self, table_data: TableData) -> int | None: ...
+    def get_paginate_by(self, table_data: TableData | None) -> int | None: ...
 
 class SingleTableMixin(TableMixinBase):
     table_class: ClassVar[type[tables.Table] | None] = None
