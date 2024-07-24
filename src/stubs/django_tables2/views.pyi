@@ -1,9 +1,8 @@
-from collections.abc import Mapping
 from typing import ClassVar
 
 from django_tables2 import tables
 
-TableData = Mapping[str, object]
+TableData = dict[str, object]
 
 class TableMixinBase:
     context_table_name: ClassVar[str]

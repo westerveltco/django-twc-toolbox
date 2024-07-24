@@ -16,6 +16,7 @@ from django.core.paginator import Paginator
 from django.db import models
 from django.http import HttpRequest
 from django.http import HttpResponse
+from django.http import HttpResponseBase
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import URLPattern
@@ -113,7 +114,7 @@ class CRUDView(View):
     @classmethod
     def as_view(  # type: ignore[override]
         cls, role: Role, **initkwargs: _TObject
-    ) -> Callable[..., HttpResponse]: ...
+    ) -> Callable[..., HttpResponseBase]: ...
     @classproperty
     def url_base(cls) -> str: ...
     @classonlymethod

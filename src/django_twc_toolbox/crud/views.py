@@ -5,7 +5,7 @@ from collections.abc import Callable
 from typing import ClassVar
 
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponse
+from django.http import HttpResponseBase
 from django_tables2 import tables
 from django_tables2.views import SingleTableMixin
 from neapolitan.views import CRUDView as NeapolitanCRUDView
@@ -62,7 +62,9 @@ class CRUDView(NeapolitanCRUDView):
 
     @classmethod
     @override
-    def as_view(cls, role: Role, **initkwargs: object) -> Callable[..., HttpResponse]:
+    def as_view(
+        cls, role: Role, **initkwargs: object
+    ) -> Callable[..., HttpResponseBase]:
         if role != Role.LIST or cls.table_class is None:
             return super().as_view(role=role, **initkwargs)
 
