@@ -114,7 +114,11 @@ django_settings_module = "tests.settings"
 strict_settings = false
 
 [tool.djlint]
+blank_line_after_tag = "endblock,extends,load"
+blank_line_before_tag = "block"
+ignore = "H031"  # Don't require `meta` tag keywords
 indent = 2
+profile = "django"
 
 [tool.hatch.build]
 exclude = [".*", "Justfile"]
