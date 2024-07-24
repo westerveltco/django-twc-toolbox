@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from collections.abc import Mapping
 from typing import ClassVar
 
 from django.core.exceptions import ImproperlyConfigured
@@ -25,7 +24,7 @@ class CRUDView(NeapolitanCRUDView):
     list_fields: ClassVar[list[str] | None] = None
 
     table_class: ClassVar[type[tables.Table] | None] = None
-    table_data: ClassVar[Mapping[str, object] | None] = None
+    table_data: ClassVar[dict[str, object] | None] = None
 
     def get_fields(self):
         match self.role:
