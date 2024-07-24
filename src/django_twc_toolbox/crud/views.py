@@ -110,8 +110,26 @@ class CRUDView(NeapolitanCRUDView):
     def as_view(  # type: ignore[override]
         cls, role: Role, **initkwargs: object
     ) -> Callable[..., HttpResponse]:
+        # Check if the list view is being called OR the list view is being called and there is no
+        # `table_class` attribute set. If not, we can just return the parent
+        # `neapolitan.views.CRUDView.as_view` to render as normal.
+
         if role != Role.LIST or cls.table_class is None:
             return super().as_view(role=role, **initkwargs)
+
+        # View is a list view and has the `table_class` attribute set, so we need to override the class
+        # returned by adding `django_tables2.views.SingleTableMixin` so that the table can be rendered.
+        # I would normally just add this to the base CRUDView up top, but since this class is used for
+        # multiple request types, we just scope it to the GET on the list url. Is this overkill? Would this
+        # be a bit clearer if it was just set above in the class declaration instead of doing this dance?
+        # Unsure. Open to changing this later on in case this is too complicated.
+        #
+        # We don't need to change anything else about the class (there's already some small logic around
+        # dealing with pagination in the `list` method above), so we can get away with just adding the mixin,
+        # inheriting from `cls` a.k.a. `CRUDView`, and leaving the body of the new view class empty (`...`).
+        #
+        # Also need to pass in the class variable `table_class` to the `as_view` class method so it's available
+        # on the instance.
 
         class ListViewWithTable(SingleTableMixin, cls): ...  # type: ignore[misc,valid-type]
 
