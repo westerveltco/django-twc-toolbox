@@ -29,7 +29,12 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 [project.optional-dependencies]
-crud = ["django-tables2", "django-template-partials", "neapolitan"]
+crud = [
+  "django-htmx",
+  "django-tables2",
+  "django-template-partials",
+  "neapolitan"
+]
 cuid = ["cuid", "django-charid-field"]
 dev = [
   "bumpver",
