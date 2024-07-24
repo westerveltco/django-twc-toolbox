@@ -68,7 +68,5 @@ class CRUDView(NeapolitanCRUDView):
 
         class ListViewWithTable(SingleTableMixin, cls): ...  # pyright: ignore[reportIncompatibleMethodOverride]
 
-        view = ListViewWithTable(role=role, **initkwargs).as_view(
-            role=role, **initkwargs
-        )
+        view = ListViewWithTable.as_view(role=role, **initkwargs)
         return view
