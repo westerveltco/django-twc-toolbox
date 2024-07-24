@@ -2,6 +2,7 @@
 # ruff: noqa: UP006
 import enum
 from collections.abc import Callable
+from collections.abc import Iterable
 from collections.abc import Mapping
 from typing import Any  # pyright: ignore[reportAny]
 from typing import ClassVar
@@ -53,6 +54,7 @@ class CRUDView(View):
     lookup_url_kwarg: ClassVar[str | None] = None
     path_converter: ClassVar[str]
     object: models.Model | None = None
+    object_list: Iterable[models.Model] | None = None
 
     queryset: ClassVar[models.QuerySet[models.Model] | None] = None
     form_class: ClassVar[forms.Form | None] = None
@@ -100,15 +102,18 @@ class CRUDView(View):
         self, queryset: models.QuerySet[_TModel], page_size: int
     ) -> Paginator[_TModel]: ...
     def paginate_queryset(
-        self, queryset: models.QuerySet[_TModel]
+        self, queryset: models.QuerySet[_TModel], page_size: int
     ) -> Page[_TModel]: ...
     def get_filterset(
-        self, queryset: models.QuerySet[models.Model] | None = None
+        self,
+        queryset: models.QuerySet[models.Model] | None = None,
     ) -> Any: ...  # TODO: change Any to FilterSet
     def get_context_object_name(self, is_list: bool = False) -> str | None: ...
     def get_context_data(self, **kwargs: _TObject) -> dict[str, _TObject]: ...
     def get_template_names(self) -> List[str]: ...
-    def render_to_response(self) -> TemplateResponse: ...
+    def render_to_response(
+        self, context: dict[str, _TObject] | None = None
+    ) -> TemplateResponse: ...
     @override
     @classmethod
     def as_view(  # type: ignore[override]
