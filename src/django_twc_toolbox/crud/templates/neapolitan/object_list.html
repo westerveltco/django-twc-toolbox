@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+
 {% load neapolitan %}
 {% load render_table from django_tables2 %}
+
 {% block content %}
   <div class="sm:flex sm:items-center">
     <h1 class="text-base font-semibold leading-6 text-gray-900 sm:flex-auto">{{ object_verbose_name_plural|capfirst }}</h1>
