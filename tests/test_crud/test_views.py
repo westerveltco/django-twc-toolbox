@@ -165,3 +165,34 @@ def test_get_context_data_table(klass, expected, rf, db):
     context = View(request=request).get_context_data()
 
     assert ("table" in context.keys()) is expected
+
+
+@pytest.mark.parametrize(
+    "htmx,expected",
+    [
+        (True, "neapolitan/object_list.html#object-list"),
+        (False, "neapolitan/object_list.html"),
+    ],
+)
+def test_get_template_names(htmx, expected, rf):
+    request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
+    request.htmx = htmx
+
+    view = BookmarkView(role=Role.LIST, **Role.LIST.extra_initkwargs())
+    view.setup(request)
+
+    template_names = view.get_template_names()
+
+    assert expected in template_names
+
+
+def test_get_template_names_no_htmx(rf):
+    request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
+
+    view = BookmarkView(role=Role.LIST, **Role.LIST.extra_initkwargs())
+    view.setup(request)
+
+    template_names = view.get_template_names()
+
+    assert "neapolitan/object_list.html" in template_names
+    assert "neapolitan/object_list.html#object-list" not in template_names
