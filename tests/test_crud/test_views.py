@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import pytest
 from django.core.exceptions import ImproperlyConfigured
+from django_tables2.views import SingleTableMixin
 from model_bakery import baker
 from neapolitan.views import Role
 
 from .models import Bookmark
+from .views import BookmarkTableView
 from .views import BookmarkView
 
 
@@ -134,3 +136,26 @@ def test_get_list_fields_override():
 
     assert fields == BookmarkView.fields
     assert fields != BookmarkView.list_fields
+
+
+def test_as_view_table_class():
+    view = BookmarkTableView.as_view(role=Role.LIST)
+
+    assert isinstance(view.view_class, type(BookmarkTableView))
+    assert issubclass(view.view_class, SingleTableMixin)
+
+
+@pytest.mark.parametrize(
+    "klass,expected",
+    [
+        (BookmarkView, False),
+        (BookmarkTableView, True),
+    ],
+)
+def test_get_context_data_table(klass, expected, rf, db):
+    View = klass.as_view(role=Role.LIST, object=baker.make(Bookmark)).view_class
+    request = rf.get(Role.LIST.maybe_reverse(View))
+
+    context = View(request=request).get_context_data()
+
+    assert ("table" in context.keys()) is expected
