@@ -11,6 +11,7 @@ from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django_htmx.middleware import HtmxDetails
 from django_tables2 import tables
 from django_tables2.views import SingleTableMixin
 from neapolitan.views import CRUDView as NeapolitanCRUDView
@@ -20,6 +21,10 @@ if sys.version_info >= (3, 12):
     from typing import override
 else:  # pragma: no cover
     from typing_extensions import override  # pyright: ignore[reportUnreachable]
+
+
+class HtmxHttpRequest(HttpRequest):
+    htmx: HtmxDetails | None
 
 
 class CRUDView(NeapolitanCRUDView):
@@ -51,6 +56,8 @@ class CRUDView(NeapolitanCRUDView):
     # So the partial name within the `object_list.html` template MUST BE `object-list`,
     # at least for the time being.
     list_partial: ClassVar[Literal["object-list"]] = "object-list"
+
+    request: HtmxHttpRequest  # pyright: ignore[reportIncompatibleVariableOverride]
 
     def get_fields(self):
         match self.role:
@@ -158,6 +165,7 @@ class CRUDView(NeapolitanCRUDView):
         if (
             self.role == Role.LIST
             and getattr(self.request, "htmx", False)
+            and self.request.htmx
             and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
             and not self.request.GET.get(self.page_kwarg, None)
         ):
