@@ -6,7 +6,10 @@ from collections.abc import Callable
 from typing import ClassVar
 
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpRequest
 from django.http import HttpResponseBase
+from django.template.response import TemplateResponse
+from django.views.generic import ListView
 from django_tables2 import tables
 from django_tables2.views import SingleTableMixin
 from neapolitan.views import CRUDView as NeapolitanCRUDView
@@ -69,6 +72,11 @@ class CRUDView(NeapolitanCRUDView):
         if role != Role.LIST or cls.table_class is None:
             return super().as_view(role=role, **initkwargs)
 
-        class ListViewWithTable(SingleTableMixin, cls): ...  # type: ignore[misc,valid-type]
+        class ListViewWithTable(SingleTableMixin, cls):  # type: ignore[misc,valid-type]
+            @override
+            def list(
+                self, request: HttpRequest, *args: object, **kwargs: object
+            ) -> TemplateResponse:
+                return ListView.get(self, request, *args, **kwargs)
 
         return ListViewWithTable.as_view(role=role, **initkwargs)

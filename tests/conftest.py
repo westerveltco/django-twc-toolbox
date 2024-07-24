@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import pytest
 from django.conf import settings
@@ -20,9 +21,11 @@ def pytest_configure(config):
 TEST_SETTINGS = {
     "INSTALLED_APPS": [
         "django_twc_toolbox",
+        "django_twc_toolbox.crud",
         "django.contrib.admin",
         "django.contrib.auth",
         "django.contrib.contenttypes",
+        "django_tables2",
         "simple_history",
         "tests.dummy",
         "tests.test_crud",
@@ -30,6 +33,7 @@ TEST_SETTINGS = {
     "TEMPLATES": [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "DIRS": [Path(__file__).parent / "templates"],
             "APP_DIRS": True,
         }
     ],
