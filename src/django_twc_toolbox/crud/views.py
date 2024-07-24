@@ -150,7 +150,7 @@ class CRUDView(NeapolitanCRUDView):
         # only render the template partial if:
         # - it's the list view
         # - it's an HTMX request
-        # - it's not a pagniated request
+        # - it's not a paginated request
         #
         # Right now, our custom templates do not have support for rendering template partials when
         # dealing with paginated lists. We could probably update it to add an `hx-target` to the
