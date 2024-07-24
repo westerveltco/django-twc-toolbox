@@ -138,17 +138,17 @@ def test_get_list_fields_override():
     assert fields != BookmarkView.list_fields
 
 
-def test_as_view_table_class():
-    view = BookmarkTableView.as_view(role=Role.LIST)
+@pytest.mark.parametrize(
+    "klass,expected",
+    [
+        (BookmarkView, False),
+        (BookmarkTableView, True),
+    ],
+)
+def test_as_view_table_class(klass, expected):
+    view = klass.as_view(role=Role.LIST)
 
-    assert isinstance(view.view_class, type(BookmarkTableView))
-    assert issubclass(view.view_class, SingleTableMixin)
-
-
-def test_as_view_no_table_class():
-    view = BookmarkView.as_view(role=Role.LIST)
-
-    assert not issubclass(view.view_class, SingleTableMixin)
+    assert issubclass(view.view_class, SingleTableMixin) is expected
 
 
 @pytest.mark.parametrize(
