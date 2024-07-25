@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.10.0]
+
 ### Added
 
 - Added `django_twc_toolbox.urls.reverse` and `django_twc_toolbox.urls.reverse_lazy` which take Django's built-in `reverse` and adds the ability to urlencode query parameters and fragments.
@@ -155,7 +157,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.9.3...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.10.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -170,3 +172,4 @@ Initial release!
 [0.9.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.1
 [0.9.2]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.2
 [0.9.3]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.3
+[0.10.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.10.0
