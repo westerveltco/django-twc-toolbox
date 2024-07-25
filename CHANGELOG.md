@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added `django_twc_toolbox.urls.reverse` and `django_twc_toolbox.urls.reverse_lazy` which take Django's built-in `reverse` and adds the ability to urlencode query parameters and fragments.
+
 ## [0.9.3]
 
 ### Fixed
