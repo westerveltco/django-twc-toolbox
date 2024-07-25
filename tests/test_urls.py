@@ -23,7 +23,7 @@ urlpatterns = [
 
 
 @pytest.fixture(autouse=True)
-def crud_settings():
+def urlconf():
     with override_settings(ROOT_URLCONF=__name__):
         yield
 
