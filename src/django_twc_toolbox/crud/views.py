@@ -142,6 +142,22 @@ class CRUDView(NeapolitanCRUDView):
                 set(filterset.form.fields.keys()) - set(filterset.primary_fields)  # type:ignore[attr-defined]
             )
 
+        def is_active(filterset: object) -> bool:
+            return any(
+                value not in (None, "", [], {})
+                for value in filterset.form.cleaned_data.values()  # type: ignore[attr-defined]
+            )
+
+        def get_active_filters(filterset: object):
+            return {
+                key: value
+                for key, value in filterset.form.cleaned_data.items()  # type:ignore[attr-defined]
+                if value not in (None, "", [], {})
+            }
+
+        filterset.__class__.is_active = is_active  # type:ignore[attr-defined]
+        filterset.__class__.active_filters = property(get_active_filters)  # type:ignore[attr-defined]
+
         return filterset
 
     @override
