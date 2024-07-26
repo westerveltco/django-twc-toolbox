@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 from django.core.exceptions import ImproperlyConfigured
+from django.http import QueryDict
 from django_tables2.views import SingleTableMixin
 from model_bakery import baker
 from neapolitan.views import Role
@@ -223,3 +224,83 @@ def test_filterset_primary_fields(rf):
 
     assert set(filterset.primary_fields) == {"url"}
     assert set(filterset.secondary_fields) == {"title", "note"}
+
+
+def test_filterset_extra_methods(rf):
+    class BookmarkFilterSetExtraMethodsView(BookmarkView):
+        filterset_fields = ["url", "title", "note"]
+
+    request = rf.get(
+        Role.LIST.maybe_reverse(BookmarkView), data=QueryDict("url=example.com")
+    )
+
+    view = BookmarkFilterSetExtraMethodsView(
+        role=Role.LIST, **Role.LIST.extra_initkwargs()
+    )
+    view.setup(request)
+
+    filterset = view.get_filterset()
+
+    filterset.form.is_valid()
+
+    assert hasattr(filterset, "is_active")
+    assert hasattr(filterset.__class__, "active_filters")
+
+
+def test_filterset_is_active(rf):
+    class BookmarkFilterSetIsActiveView(BookmarkView):
+        filterset_fields = ["url", "title", "note"]
+
+    request = rf.get(
+        Role.LIST.maybe_reverse(BookmarkView), data=QueryDict("url=example.com")
+    )
+
+    view = BookmarkFilterSetIsActiveView(role=Role.LIST, **Role.LIST.extra_initkwargs())
+    view.setup(request)
+
+    filterset = view.get_filterset()
+
+    filterset.form.is_valid()
+
+    assert callable(filterset.is_active)
+    assert filterset.is_active() is True
+
+
+def test_filterset_active_filters(rf):
+    class BookmarkFilterSetActiveFiltersView(BookmarkView):
+        filterset_fields = ["url", "title", "note"]
+
+    request = rf.get(
+        Role.LIST.maybe_reverse(BookmarkView), data=QueryDict("url=example.com")
+    )
+
+    view = BookmarkFilterSetActiveFiltersView(
+        role=Role.LIST, **Role.LIST.extra_initkwargs()
+    )
+    view.setup(request)
+
+    filterset = view.get_filterset()
+
+    filterset.form.is_valid()
+
+    assert isinstance(filterset.active_filters, dict)
+    assert filterset.active_filters == {"url": "example.com"}
+
+
+def test_filterset_extra_methods_no_filters(rf):
+    class BookmarkFilterSetExtraMethodsView(BookmarkView):
+        filterset_fields = ["url", "title", "note"]
+
+    request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
+
+    view = BookmarkFilterSetExtraMethodsView(
+        role=Role.LIST, **Role.LIST.extra_initkwargs()
+    )
+    view.setup(request)
+
+    filterset = view.get_filterset()
+
+    filterset.form.is_valid()
+
+    assert filterset.is_active() is False
+    assert filterset.active_filters == {}
