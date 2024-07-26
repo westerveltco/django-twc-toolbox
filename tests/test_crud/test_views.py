@@ -205,3 +205,21 @@ def test_table_view_ordered(client, db):
     response = client.get(Role.LIST.maybe_reverse(BookmarkTableOrderedView))
 
     assert response.status_code == 200
+
+
+def test_filterset_primary_fields(rf):
+    class BookmarkFilterSetPrimaryFieldsView(BookmarkView):
+        filterset_fields = ["url", "title", "note"]
+        filterset_primary_fields = ["url"]
+
+    request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
+
+    view = BookmarkFilterSetPrimaryFieldsView(
+        role=Role.LIST, **Role.LIST.extra_initkwargs()
+    )
+    view.setup(request)
+
+    filterset = view.get_filterset()
+
+    assert set(filterset.primary_fields) == {"url"}
+    assert set(filterset.secondary_fields) == {"title", "note"}
