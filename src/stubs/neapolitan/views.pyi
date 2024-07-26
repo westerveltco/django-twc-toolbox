@@ -4,7 +4,6 @@ import enum
 from collections.abc import Callable
 from collections.abc import Iterable
 from collections.abc import Mapping
-from typing import Any  # pyright: ignore[reportAny]
 from typing import ClassVar
 from typing import List
 from typing import TypeVar
@@ -107,7 +106,7 @@ class CRUDView(View):
     def get_filterset(
         self,
         queryset: models.QuerySet[models.Model] | None = None,
-    ) -> Any: ...  # TODO: change Any to FilterSet
+    ) -> _TObject: ...  # TODO: change Any to FilterSet
     def get_context_object_name(self, is_list: bool = False) -> str | None: ...
     def get_context_data(self, **kwargs: _TObject) -> dict[str, _TObject]: ...
     def get_template_names(self) -> List[str]: ...
