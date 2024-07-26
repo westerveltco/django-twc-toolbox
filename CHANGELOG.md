@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.11.0]
+
 ### Added
 
 - Added support for specifying primary filters on `CRUDView` via a `filterset_primary_fields` class attribute. Sometimes you have a model and corresponding crud view that has a bunch of filters attached to it. Rather than show all filters or show none and hide them behind a 'Show Filters' button, this allows you to have a handful of primary filters with the rest of the filters set as secondary. This way, you can always show the primary filters, but hide the secondary ones.
@@ -166,7 +168,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.11.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -182,3 +184,4 @@ Initial release!
 [0.9.2]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.2
 [0.9.3]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.3
 [0.10.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.10.0
+[0.11.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.11.0
