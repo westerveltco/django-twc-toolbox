@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added support for specifying primary filters on `CRUDView` via a `filterset_primary_fields` class attribute. Sometimes you have a model and corresponding crud view that has a bunch of filters attached to it. Rather than show all filters or show none and hide them behind a 'Show Filters' button, this allows you to have a handful of primary filters with the rest of the filters set as secondary. This way, you can always show the primary filters, but hide the secondary ones.
+
 ### Changed
 
 - Added override of `get_paginate_by` to `CRUDView` in order to accept arbitrary `args` and `kwargs`. This is due to the differences in the method between `neapolitan.views.CRUDView` and `django_tables2.views.SingleTableMixin`. By making this change, it simplifies the code path in the `CRUDView.list` method a tiny bit.

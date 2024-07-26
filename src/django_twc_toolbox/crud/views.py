@@ -7,6 +7,7 @@ from typing import ClassVar
 from typing import Literal
 
 from django.core.exceptions import ImproperlyConfigured
+from django.db import models
 from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
@@ -57,6 +58,8 @@ class CRUDView(NeapolitanCRUDView):
     # at least for the time being.
     list_partial: ClassVar[Literal["object-list"]] = "object-list"
 
+    filterset_primary_fields: list[str] | None = None
+
     request: HtmxHttpRequest  # pyright: ignore[reportIncompatibleVariableOverride]
 
     def get_fields(self):
@@ -93,7 +96,7 @@ class CRUDView(NeapolitanCRUDView):
 
         filterset = self.get_filterset(queryset)
         if filterset is not None:
-            queryset = filterset.qs
+            queryset = filterset.qs  # type:ignore[attr-defined]
 
         if not self.allow_empty and not queryset.exists():
             raise Http404
@@ -123,6 +126,23 @@ class CRUDView(NeapolitanCRUDView):
     @override
     def get_paginate_by(self, *args: object, **kwargs: object) -> int | None:
         return super().get_paginate_by()
+
+    @override
+    def get_filterset(
+        self, queryset: models.QuerySet[models.Model] | None = None
+    ) -> object | None:
+        filterset = super().get_filterset(queryset)
+
+        if filterset is None:
+            return None
+
+        if self.filterset_primary_fields is not None:
+            filterset.primary_fields = self.filterset_primary_fields  # type: ignore[attr-defined]
+            filterset.secondary_fields = list(  # type: ignore[attr-defined]
+                set(filterset.form.fields.keys()) - set(filterset.primary_fields)  # type:ignore[attr-defined]
+            )
+
+        return filterset
 
     @override
     def get_context_data(self, **kwargs: object) -> dict[str, object]:
