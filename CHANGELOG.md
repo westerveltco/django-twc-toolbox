@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Added override of `get_paginate_by` to `CRUDView` in order to accept arbitrary `args` and `kwargs`. This is due to the differences in the method between `neapolitan.views.CRUDView` and `django_tables2.views.SingleTableMixin`. By making this change, it simplifies the code path in the `CRUDView.list` method a tiny bit.
+
 ## [0.10.0]
 
 ### Added
