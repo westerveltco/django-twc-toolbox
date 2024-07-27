@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from decimal import Decimal
 from typing import TypeVar
 
 from django import template
@@ -10,6 +11,8 @@ from django.core.paginator import Page
 from django.core.paginator import Paginator
 from django.db import models
 from django.utils.itercompat import is_iterable
+
+from django_twc_toolbox.decimal import format_decimal_places
 
 register = template.Library()
 
@@ -104,3 +107,8 @@ def class_name(instance: object) -> str:
 @register.filter
 def startswith(text: str, starts: str) -> bool:
     return text.startswith(starts)
+
+
+@register.filter
+def decimal_places(number: float | int | str | Decimal, decimal_places: int = 2) -> str:
+    return str(format_decimal_places(number, decimal_places=decimal_places))
