@@ -33,7 +33,7 @@ def format_decimal_places(number: T, *, decimal_places: int = 2) -> str | Decima
             fractional_part = fractional_part.ljust(decimal_places, "0")
         formatted_str = f"{integer_part}.{fractional_part}"
 
-    if isinstance(number, (float, str)):
+    if isinstance(number, (float | str)):
         return formatted_str
     else:
         return Decimal(formatted_str)
