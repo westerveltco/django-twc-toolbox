@@ -386,48 +386,13 @@ def test_get_role_context_data_no_arg(role):
         Role.DELETE,
     ],
 )
-def test_get_role_context_data_no_arg_or_kwargs(role):
-    class BookmarkGetRoleContextDataNoArgOrKwargsView(BookmarkView):
-        def get_detail_context_data(self):
-            return {"detail": "value"}
-
-        def get_list_context_data(self):
-            return {"list": "value"}
-
-        def get_create_context_data(self):
-            return {"create": "value"}
-
-        def get_update_context_data(self):
-            return {"update": "value"}
-
-        def get_delete_context_data(self):
-            return {"delete": "value"}
-
-    view = BookmarkGetRoleContextDataNoArgOrKwargsView()
-    view.role = role
-
-    result = view.get_role_context_data({"context": "data"})
-
-    assert result == {role.value: "value"}
-
-
-@pytest.mark.parametrize(
-    "role",
-    [
-        Role.DETAIL,
-        Role.LIST,
-        Role.CREATE,
-        Role.UPDATE,
-        Role.DELETE,
-    ],
-)
 def test_get_role_context_data_nonexistent(role):
     view = BookmarkView()
     view.role = role
 
     result = view.get_role_context_data({})
 
-    assert result is None
+    assert result == {}
 
 
 @pytest.mark.parametrize(
