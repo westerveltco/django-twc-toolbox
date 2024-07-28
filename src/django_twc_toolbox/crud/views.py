@@ -182,7 +182,7 @@ class CRUDView(NeapolitanCRUDView):
         if func is None or not callable(func):
             return None
 
-        role_context = func(context, **kwargs)
+        role_context = func(context=context, **kwargs)
         return role_context
 
     @override
