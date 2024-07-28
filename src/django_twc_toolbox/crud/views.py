@@ -1,7 +1,6 @@
 # pyright: reportUnnecessaryTypeIgnoreComment=false
 from __future__ import annotations
 
-import inspect
 import sys
 from collections.abc import Callable
 from typing import ClassVar
