@@ -183,6 +183,11 @@ class CRUDView(NeapolitanCRUDView):
             return None
 
         role_context = func(context=context, **kwargs)
+
+        if not isinstance(role_context, dict):
+            msg = f"`{func_name}` must return a dictionary"
+            raise ValueError(msg)
+
         return role_context
 
     @override
