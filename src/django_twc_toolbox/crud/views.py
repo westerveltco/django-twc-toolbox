@@ -176,6 +176,9 @@ class CRUDView(NeapolitanCRUDView):
     def get_role_context_data(
         self, context: dict[str, object], **kwargs: object
     ) -> dict[str, object] | None:
+        if not hasattr(self, "role"):
+            return None
+
         func_name = f"get_{self.role.value}_context_data"
         func = getattr(self, func_name, None)
 
