@@ -174,7 +174,7 @@ class CRUDView(NeapolitanCRUDView):
                 role_context_method = getattr(self, role_context_method_name)
                 if not callable(role_context_method):
                     continue
-                role_context = role_context_method(**kwargs)
+                role_context = role_context_method(context, **kwargs)
                 context.update(role_context)
         return context
 
