@@ -75,12 +75,12 @@ class CRUDView(NeapolitanCRUDView):
         if not hasattr(self, "role"):
             return None
             
-        if role_attr := getattr(self, f"{self.role.value}_fields", None):
-            return role_attr
-
         if role_func := getattr(self, f"get_{self.role.value}_fields", None):
             if callable(role_func):
                 return role_func()
+                
+        if role_attr := getattr(self, f"{self.role.value}_fields", None):
+            return role_attr
             
         return None
 
