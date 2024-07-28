@@ -1,6 +1,7 @@
 # pyright: reportUnnecessaryTypeIgnoreComment=false
 from __future__ import annotations
 
+import inspect
 import sys
 from collections.abc import Callable
 from typing import ClassVar
@@ -185,7 +186,11 @@ class CRUDView(NeapolitanCRUDView):
         if func is None or not callable(func):
             return None
 
-        role_context = func(context=context, **kwargs)
+        sig = inspect.signature(func)
+        if len(sig.parameters) == 0:
+            role_context = func()
+        else:
+            role_context = func(context=context, **kwargs)
 
         if not isinstance(role_context, dict):
             msg = f"`{func_name}` must return a dictionary"
