@@ -168,6 +168,14 @@ class CRUDView(NeapolitanCRUDView):
             context["delete_view_url"] = Role.DELETE.maybe_reverse(self, self.object)
             context["detail_view_url"] = Role.DETAIL.maybe_reverse(self, self.object)
             context["update_view_url"] = Role.UPDATE.maybe_reverse(self, self.object)
+        for role in Role:
+            role_context_method_name = f"get_{role.value}_context_data"
+            if self.role is role and hasattr(self, role_context_method_name):
+                role_context_method = getattr(self, role_context_method_name)
+                if not callable(role_context_method):
+                    continue
+                role_context = role_context_method(**kwargs)
+                context.update(role_context)
         return context
 
     @override
