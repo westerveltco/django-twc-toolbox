@@ -61,18 +61,12 @@ class CRUDView(NeapolitanCRUDView):
     filterset_primary_fields: list[str] | None = None
 
     request: HtmxHttpRequest  # pyright: ignore[reportIncompatibleVariableOverride]
-
+    
     def get_fields(self):
-        match self.role:
-            case Role.DETAIL:
-                fields = self.get_detail_fields()
-            case Role.LIST:
-                fields = self.get_list_fields()
-            case _:
-                fields = None
-
-        if fields is not None:
-            return fields
+        role_fields = self.get_role_fields()
+        
+        if role_fields is not None:
+            return role_fields
 
         if self.fields is not None:
             return self.fields
@@ -80,11 +74,17 @@ class CRUDView(NeapolitanCRUDView):
         msg = "'%s' must define 'fields' or override 'get_fields()'"
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
-    def get_detail_fields(self):
-        return self.detail_fields
+    def get_role_fields(self):
+        if not hasattr(self, "role"):
+            return None
 
-    def get_list_fields(self):
-        return self.list_fields
+        func_name = f"get_{self.role.value}_fields"
+        func = getattr(self, func_name, None)
+
+        if func is None:
+            return None
+
+        return func() if callable(func) else func
 
     @override
     def list(
