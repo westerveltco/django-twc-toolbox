@@ -168,7 +168,28 @@ class CRUDView(NeapolitanCRUDView):
             context["delete_view_url"] = Role.DELETE.maybe_reverse(self, self.object)
             context["detail_view_url"] = Role.DETAIL.maybe_reverse(self, self.object)
             context["update_view_url"] = Role.UPDATE.maybe_reverse(self, self.object)
+        context.update(self.get_role_context_data(context, **kwargs))
         return context
+
+    def get_role_context_data(
+        self, context: dict[str, object], **kwargs: object
+    ) -> dict[str, object]:
+        if not hasattr(self, "role"):
+            return {}
+
+        func_name = f"get_{self.role.value}_context_data"
+        func = getattr(self, func_name, None)
+
+        if func is None or not callable(func):
+            return {}
+
+        role_context = func(context=context, **kwargs)
+
+        if not isinstance(role_context, dict):
+            msg = f"`{func_name}` must return a dictionary"
+            raise ValueError(msg)
+
+        return role_context
 
     @override
     def get_template_names(self):

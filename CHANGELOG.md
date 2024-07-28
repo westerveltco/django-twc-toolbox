@@ -24,10 +24,12 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - Added support for specifying primary filters on `CRUDView` via a `filterset_primary_fields` class attribute. Sometimes you have a model and corresponding crud view that has a bunch of filters attached to it. Rather than show all filters or show none and hide them behind a 'Show Filters' button, this allows you to have a handful of primary filters with the rest of the filters set as secondary. This way, you can always show the primary filters, but hide the secondary ones.
 - Added an extra method (`is_active()`) and property (`active_filters`) to the `FilterSet` returned by `CRUDView.get_filterset` related to the active filters set on the view in the current request.
+- Introduced dynamic role-based context data in `CRUDView` with new `get_role_context_data` method through role-specific context methods (e.g., `get_create_context_data`) to add custom context data scoped only to that role.
 
 ### Changed
 
 - Added override of `get_paginate_by` to `CRUDView` in order to accept arbitrary `args` and `kwargs`. This is due to the differences in the method between `neapolitan.views.CRUDView` and `django_tables2.views.SingleTableMixin`. By making this change, it simplifies the code path in the `CRUDView.list` method a tiny bit.
+- `get_context_data` now incorporates role-specific context data by calling `get_role_context_data`.
 
 ## [0.10.0]
 

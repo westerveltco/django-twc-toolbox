@@ -304,3 +304,126 @@ def test_filterset_extra_methods_no_filters(rf):
 
     assert filterset.is_active() is False
     assert filterset.active_filters == {}
+
+
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+        Role.DELETE,
+    ],
+)
+def test_get_role_context_data(role):
+    class BookmarkGetRoleContextDataView(BookmarkView):
+        def get_detail_context_data(self, context, **kwargs):
+            return {"detail": "value"}
+
+        def get_list_context_data(self, context, **kwargs):
+            return {"list": "value"}
+
+        def get_create_context_data(self, context, **kwargs):
+            return {"create": "value"}
+
+        def get_update_context_data(self, context, **kwargs):
+            return {"update": "value"}
+
+        def get_delete_context_data(self, context, **kwargs):
+            return {"delete": "value"}
+
+    view = BookmarkGetRoleContextDataView()
+    view.role = role
+
+    result = view.get_role_context_data({"context": "data"})
+
+    assert result == {role.value: "value"}
+
+
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+        Role.DELETE,
+    ],
+)
+def test_get_role_context_data_no_arg(role):
+    class BookmarkGetRoleContextDataNoArgView(BookmarkView):
+        def get_detail_context_data(self, **kwargs):
+            return {"detail": "value"}
+
+        def get_list_context_data(self, **kwargs):
+            return {"list": "value"}
+
+        def get_create_context_data(self, **kwargs):
+            return {"create": "value"}
+
+        def get_update_context_data(self, **kwargs):
+            return {"update": "value"}
+
+        def get_delete_context_data(self, **kwargs):
+            return {"delete": "value"}
+
+    view = BookmarkGetRoleContextDataNoArgView()
+    view.role = role
+
+    result = view.get_role_context_data({"context": "data"})
+
+    assert result == {role.value: "value"}
+
+
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+        Role.DELETE,
+    ],
+)
+def test_get_role_context_data_nonexistent(role):
+    view = BookmarkView()
+    view.role = role
+
+    result = view.get_role_context_data({})
+
+    assert result == {}
+
+
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+        Role.DELETE,
+    ],
+)
+def test_get_role_context_data_incorrect_return(role):
+    class BookmarkRoleContextDataView(BookmarkView):
+        def get_detail_context_data(self, context, **kwargs):
+            return "not a dict"
+
+        def get_list_context_data(self, context, **kwargs):
+            return "not a dict"
+
+        def get_create_context_data(self, context, **kwargs):
+            return "not a dict"
+
+        def get_update_context_data(self, context, **kwargs):
+            return "not a dict"
+
+        def get_delete_context_data(self, context, **kwargs):
+            return "not a dict"
+
+    view = BookmarkRoleContextDataView()
+    view.role = role
+
+    with pytest.raises(ValueError):
+        view.get_role_context_data({})
