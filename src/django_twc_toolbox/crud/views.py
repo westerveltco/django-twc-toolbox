@@ -163,12 +163,17 @@ class CRUDView(NeapolitanCRUDView):
     @override
     def get_context_data(self, **kwargs: object) -> dict[str, object]:
         context = super().get_context_data(**kwargs)
+
         context["list_view_url"] = Role.LIST.maybe_reverse(self)
         if self.object is not None:
             context["delete_view_url"] = Role.DELETE.maybe_reverse(self, self.object)
             context["detail_view_url"] = Role.DETAIL.maybe_reverse(self, self.object)
             context["update_view_url"] = Role.UPDATE.maybe_reverse(self, self.object)
-        context.update(self.get_role_context_data(context, **kwargs))
+
+        role_context = self.get_role_context_data(context, **kwargs)
+        if role_context:
+            context.update(role_context)
+
         return context
 
     def get_role_context_data(

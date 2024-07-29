@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a bug in `CRUDView.get_context_data` if the role had no specific context data method defined.
+
 ## [0.12.0]
 
 ### Added
