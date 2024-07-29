@@ -405,6 +405,25 @@ def test_get_role_context_data_nonexistent(role):
         Role.DELETE,
     ],
 )
+def test_get_context_data_role_method_nonexistent(role):
+    view = BookmarkView()
+    view.role = role
+
+    view.get_context_data()
+
+    assert True
+
+
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+        Role.DELETE,
+    ],
+)
 def test_get_role_context_data_incorrect_return(role):
     class BookmarkRoleContextDataView(BookmarkView):
         def get_detail_context_data(self, context, **kwargs):
