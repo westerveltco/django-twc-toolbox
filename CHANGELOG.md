@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.12.0]
+
 ### Added
 
 - Introduced dynamic role-based context data in `CRUDView` with new `get_role_context_data` method through role-specific context methods (e.g., `get_create_context_data`) to add custom context data scoped only to that role.
@@ -176,7 +178,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.11.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.12.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -193,3 +195,4 @@ Initial release!
 [0.9.3]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.9.3
 [0.10.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.10.0
 [0.11.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.11.0
+[0.12.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.0
