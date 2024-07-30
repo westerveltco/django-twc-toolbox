@@ -51,9 +51,7 @@ def object_detail(object: models.Model, view: CRUDView):
             mf = object._meta.get_field(f)
             rendered = str(getattr(object, f))
 
-            if view.detail_field_renderers and view.detail_field_renderers.get(f, None):
-                renderer = view.detail_field_renderers.get(f)
-
+            if renderer := view.detail_field_renderers.get(f):
                 if callable(renderer):
                     rendered = renderer(field=mf, object=object)
                 else:
