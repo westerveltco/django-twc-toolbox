@@ -89,11 +89,6 @@ class CRUDView(NeapolitanCRUDView):
     def get_list_fields(self):
         return self.list_fields
 
-    def get_detail_field_renderers(
-        self,
-    ) -> dict[str, Callable[..., str | SafeString]]:
-        return self.detail_field_renderers
-
     @override
     def list(
         self, request: HttpRequest, *args: object, **kwargs: object

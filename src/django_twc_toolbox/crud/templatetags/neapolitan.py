@@ -45,13 +45,15 @@ def object_detail(object: models.Model, view: CRUDView):
     """
 
     fields = view.get_fields()
-    renderers = view.get_detail_field_renderers()
 
     def iter() -> Generator[tuple[str, str], None, None]:
         for f in fields:
             mf = object._meta.get_field(f)
             if view.detail_field_renderers:
                 renderer = view.detail_field_renderers.get(f, None)
+
+                if renderer is None:
+                    continue
 
                 if callable(renderer):
                     rendered = renderer(field=mf, object=object)
