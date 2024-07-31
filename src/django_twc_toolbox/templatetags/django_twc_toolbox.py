@@ -99,3 +99,8 @@ def klass(instance: _T) -> type[_T]:
 @register.filter
 def class_name(instance: object) -> str:
     return instance.__class__.__name__
+
+
+@register.filter
+def startswith(text: str, starts: str) -> bool:
+    return text.startswith(starts)
