@@ -361,7 +361,7 @@ class TestDatePaginator:
         indirect=["model_data_queryset"],
     )
     def test_paginator_page_date_range_missing(self, objects):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             DatePaginator(objects, "date")
 
 
