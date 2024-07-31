@@ -21,7 +21,7 @@ class DatePaginator(Paginator):
         object_list: _SupportsPagination,
         date_field: str,
         page_date_range: datetime.timedelta,
-        **kwargs: object,
+        **kwargs: Any,
     ) -> None:
         self.date_field = date_field
         self.page_date_range = page_date_range
@@ -36,7 +36,7 @@ class DatePaginator(Paginator):
 
         super().__init__(
             object_list,
-            1,  # per_page is 1 as we paginate by date
+            per_page=1,  # per_page is 1 as we paginate by date
             **kwargs,
         )
 
