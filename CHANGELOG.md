@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.13.0]
+
 ### Added
 
 - Added a `{% startswith %}` utility templatetag filter.
@@ -198,7 +200,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.12.1...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.13.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -217,3 +219,4 @@ Initial release!
 [0.11.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.11.0
 [0.12.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.0
 [0.12.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.1
+[0.13.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.13.0
