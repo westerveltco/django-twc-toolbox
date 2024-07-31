@@ -11,8 +11,10 @@ class BookmarkView(CRUDView):
     model = Bookmark
     fields = ["url", "title", "note"]
 
+    create_fields = ["url", "title", "note"]
     detail_fields = ["url", "title"]
     list_fields = ["url"]
+    update_fields = ["title"]
 
 
 class BookmarkTable(tables.Table):

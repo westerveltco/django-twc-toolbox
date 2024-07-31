@@ -31,9 +31,6 @@ class HtmxHttpRequest(HttpRequest):
 class CRUDView(NeapolitanCRUDView):
     paginate_by = 100
 
-    detail_fields: ClassVar[list[str] | None] = None
-    list_fields: ClassVar[list[str] | None] = None
-
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
 
@@ -61,27 +58,27 @@ class CRUDView(NeapolitanCRUDView):
     filterset_primary_fields: list[str] | None = None
 
     request: HtmxHttpRequest  # pyright: ignore[reportIncompatibleVariableOverride]
-    
+
     def get_fields(self):
         fields = self.get_role_fields() or self.fields
-        
+
         if fields is not None:
             return fields
 
         msg = f"'{self.__class__.__name__}' must define 'fields' or override 'get_fields()'"
         raise ImproperlyConfigured(msg)
 
-     def get_role_fields(self):
-        if not hasattr(self, "role"):
+    def get_role_fields(self):
+        if not hasattr(self, "role") or self.role is Role.DELETE:
             return None
-            
+
         if role_func := getattr(self, f"get_{self.role.value}_fields", None):
             if callable(role_func):
                 return role_func()
-                
+
         if role_attr := getattr(self, f"{self.role.value}_fields", None):
             return role_attr
-            
+
         return None
 
     @override

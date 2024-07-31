@@ -39,7 +39,7 @@ def test_get_context_data_with_object(db):
         (Role.DETAIL, ["url", "title"]),
         (Role.LIST, ["url"]),
         (Role.CREATE, ["url", "title", "note"]),
-        (Role.UPDATE, ["url", "title", "note"]),
+        (Role.UPDATE, ["title"]),
         (Role.DELETE, ["url", "title", "note"]),
     ],
 )
@@ -104,40 +104,20 @@ def test_get_fields_no_fields(role):
         ).get_fields()
 
 
-def test_get_detail_fields():
-    fields = BookmarkView().get_detail_fields()
+@pytest.mark.parametrize(
+    "role",
+    [
+        Role.DETAIL,
+        Role.LIST,
+        Role.CREATE,
+        Role.UPDATE,
+    ],
+)
+def test_get_role_fields(role):
+    fields = BookmarkView(role=role).get_role_fields()
 
     assert fields != BookmarkView.fields
-    assert fields == BookmarkView.detail_fields
-
-
-def test_get_detail_fields_override():
-    class BookmarkViewGetDetailFieldsOverride(BookmarkView):
-        def get_detail_fields(self):
-            return BookmarkView.fields
-
-    fields = BookmarkViewGetDetailFieldsOverride().get_detail_fields()
-
-    assert fields == BookmarkView.fields
-    assert fields != BookmarkView.detail_fields
-
-
-def test_get_list_fields():
-    fields = BookmarkView().get_list_fields()
-
-    assert fields != BookmarkView.fields
-    assert fields == BookmarkView.list_fields
-
-
-def test_get_list_fields_override():
-    class BookmarkViewGetListFieldsOverride(BookmarkView):
-        def get_list_fields(self):
-            return BookmarkView.fields
-
-    fields = BookmarkViewGetListFieldsOverride().get_list_fields()
-
-    assert fields == BookmarkView.fields
-    assert fields != BookmarkView.list_fields
+    assert fields == getattr(BookmarkView, f"{role.value}_fields")
 
 
 @pytest.mark.parametrize(
