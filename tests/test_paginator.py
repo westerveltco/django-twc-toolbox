@@ -346,21 +346,6 @@ class TestDatePaginator:
         ],
         indirect=["model_data_queryset"],
     )
-    def test_paginator_date_range(self, objects):
-        date_range = datetime.timedelta(days=10)
-        paginator = DatePaginator(objects, "date", date_range)
-
-        with pytest.warns(DeprecationWarning):
-            assert paginator.date_range == date_range
-
-    @pytest.mark.parametrize(
-        "model_data_queryset",
-        [
-            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
-            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
-        ],
-        indirect=["model_data_queryset"],
-    )
     def test_paginator_page_date_range(self, objects):
         date_range = datetime.timedelta(days=10)
         paginator = DatePaginator(objects, "date", date_range)
@@ -376,22 +361,8 @@ class TestDatePaginator:
         indirect=["model_data_queryset"],
     )
     def test_paginator_page_date_range_missing(self, objects):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             DatePaginator(objects, "date")
-
-    @pytest.mark.parametrize(
-        "model_data_queryset",
-        [
-            ModelClassParams(model_class=DateOrderableModel, number_of_days=90),
-            ModelClassParams(model_class=DateTimeOrderableModel, number_of_days=180),
-        ],
-        indirect=["model_data_queryset"],
-    )
-    def test_paginator_explicit_date_range(self, objects):
-        date_range = datetime.timedelta(days=10)
-
-        with pytest.warns(DeprecationWarning):
-            DatePaginator(objects, "date", date_range=date_range)
 
 
 class TestDatePaginatorInheritance:
