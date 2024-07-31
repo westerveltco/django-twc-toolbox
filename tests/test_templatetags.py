@@ -16,6 +16,7 @@ from django_twc_toolbox.templatetags.django_twc_toolbox import elided_page_range
 from django_twc_toolbox.templatetags.django_twc_toolbox import initials
 from django_twc_toolbox.templatetags.django_twc_toolbox import klass
 from django_twc_toolbox.templatetags.django_twc_toolbox import query_string
+from django_twc_toolbox.templatetags.django_twc_toolbox import startswith
 
 pytestmark = pytest.mark.django_db
 
@@ -252,3 +253,17 @@ def test_class_name_templatetag():
     rendered = template.render(Context({"template": template}))
 
     assert "Template" in rendered
+
+
+def test_startswith():
+    assert startswith("FooBar", "Foo")
+
+
+def test_startswith_templatetag():
+    template = Template(
+        "{% load django_twc_toolbox %} {% if var|startswith:'Foo' %}Bar{% endif %}"
+    )
+
+    rendered = template.render(Context({"var": "FooBar"}))
+
+    assert "Bar" in rendered

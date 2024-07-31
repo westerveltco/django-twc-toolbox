@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added a `{% startswith %}` utility templatetag filter.
+
 ## [0.12.1]
 
 ### Fixed
