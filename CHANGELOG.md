@@ -21,10 +21,12 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Added
 
 - Added a `{% startswith %}` utility templatetag filter.
+- Added a generic type argument to `DatePaginator`.
 
 ### Changed
 
 - `date_page_range` is now explicitly a required argument to `DatePaginator`. Previously, it was allowed to be `None`, but would still fail if `date_range` was not passed in instead. `date_range` has been removed as an argument, see below.
+- Types within `DatePaginator` have been adjusted.
 
 ### Removed
 
