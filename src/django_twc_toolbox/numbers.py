@@ -15,7 +15,6 @@ def format_number_no_round(number: str, *, decimal_places: int = 2) -> str: ...
 @overload
 def format_number_no_round(number: Decimal, *, decimal_places: int = 2) -> Decimal: ...
 def format_number_no_round(number: T, *, decimal_places: int = 2) -> str | Decimal:
-    Decimal:
     """Formats a number with the number of decimal places specified without rounding.
 
     It takes a number and ensures it has at least the number of decimal places passed
