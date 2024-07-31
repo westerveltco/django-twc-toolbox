@@ -20,7 +20,7 @@ def format_number_no_round(number: T, *, decimal_places: int = 2) -> str | Decim
 
     It takes a number and ensures it has at least the number of decimal places passed
     it as an argument, defaulting to 2. This csn be useful for displaying and working
-    with currency as it does not round the number, preserving any additional precision 
+    with currency as it does not round the number, preserving any additional precision
     beyond the decimal places if present.
 
     Args:
