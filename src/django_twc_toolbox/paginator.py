@@ -3,6 +3,8 @@ from __future__ import annotations
 import datetime
 import warnings
 from typing import TYPE_CHECKING
+from typing import Generic
+from typing import TypeVar
 
 from django.core.paginator import Page
 from django.core.paginator import Paginator
@@ -15,10 +17,13 @@ if TYPE_CHECKING:
     from django.core.paginator import _SupportsPagination
 
 
-class DatePaginator(Paginator):
+_T = TypeVar("_T")
+
+
+class DatePaginator(Generic[_T], Paginator[_T]):
     def __init__(
         self,
-        object_list: _SupportsPagination,
+        object_list: _SupportsPagination[_T],
         date_field: str,
         page_date_range: datetime.timedelta,
         **kwargs: Any,
