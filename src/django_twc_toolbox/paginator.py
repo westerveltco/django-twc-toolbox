@@ -20,18 +20,10 @@ class DatePaginator(Paginator):
         self,
         object_list: _SupportsPagination,
         date_field: str,
-        page_date_range: datetime.timedelta | None = None,
-        date_range: datetime.timedelta | None = None,
-        **kwargs,
+        page_date_range: datetime.timedelta,
+        **kwargs: object,
     ) -> None:
         self.date_field = date_field
-
-        if date_range and not page_date_range:
-            self._warn_about_date_range_deprecation()
-            page_date_range = date_range
-        elif not page_date_range:
-            raise ValueError("The `page_date_range` argument is required.")
-
         self.page_date_range = page_date_range
 
         if kwargs.get("orphans", None):
@@ -46,19 +38,6 @@ class DatePaginator(Paginator):
             object_list,
             1,  # per_page is 1 as we paginate by date
             **kwargs,
-        )
-
-    @cached_property
-    def date_range(self) -> datetime.timedelta:
-        self._warn_about_date_range_deprecation()
-        return self.page_date_range
-
-    def _warn_about_date_range_deprecation(self):
-        warnings.warn(
-            "The `date_range` argument is deprecated in favor of `page_date_range` "
-            "and will be removed in v0.4.0.",
-            DeprecationWarning,
-            stacklevel=2,
         )
 
     @cached_property
