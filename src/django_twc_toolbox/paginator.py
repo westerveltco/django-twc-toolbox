@@ -1,3 +1,4 @@
+# pyright: reportAny=false,reportPrivateUsage=false
 from __future__ import annotations
 
 import datetime
@@ -5,19 +6,24 @@ import warnings
 from typing import TYPE_CHECKING
 from typing import Generic
 from typing import TypeVar
+from typing import cast
 
 from django.core.paginator import Page
 from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.utils.functional import cached_property
 
+from ._types import override
+
 if TYPE_CHECKING:
     from typing import Any
 
     from django.core.paginator import _SupportsPagination
+    from django.db.models.fields import _ErrorMessagesDict
 
 
 _T = TypeVar("_T")
+_PaginatorKwargs = int | bool | _ErrorMessagesDict
 
 
 class DatePaginator(Generic[_T], Paginator[_T]):
@@ -33,8 +39,7 @@ class DatePaginator(Generic[_T], Paginator[_T]):
 
         if kwargs.get("orphans", None):
             warnings.warn(
-                "The `orphans` parameter is not applicable for DatePaginator and "
-                "will be ignored.",
+                "The `orphans` parameter is not applicable for DatePaginator and will be ignored.",
                 UserWarning,
                 stacklevel=2,
             )
@@ -46,27 +51,29 @@ class DatePaginator(Generic[_T], Paginator[_T]):
         )
 
     @cached_property
-    def date_segments(self) -> list[tuple[datetime.datetime, datetime.datetime]]:
+    def date_segments(self) -> list[tuple[datetime.date, datetime.date]]:
         # Check if the object_list is empty.
-        # Check for `exists()` first for performance, falling back in case it's
-        # not a QuerySet.
-        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
-            if not self.object_list.exists():
-                return []
+        exists = True
+        # Check for `exists()` first for performance, falling back in case it's not a QuerySet.
+        if hasattr(self.object_list, "exists"):
+            exists = self.object_list.exists()
         elif not self.object_list:
+            exists = False
+
+        if not exists:
             return []
 
-        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
+        if isinstance(self.object_list, QuerySet):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
             first_obj = self.object_list[0]
             last_obj = self.object_list[-1]
 
-        first_date = getattr(first_obj, self.date_field)
-        last_date = getattr(last_obj, self.date_field)
+        first_date = cast(datetime.date, getattr(first_obj, self.date_field))
+        last_date = cast(datetime.date, getattr(last_obj, self.date_field))
 
-        segments = []
+        segments: list[tuple[datetime.date, datetime.date]] = []
         current_start_date = first_date
         if self.chronological:
             # if chronological, we are moving forward in time through the `object_list`
@@ -115,7 +122,8 @@ class DatePaginator(Generic[_T], Paginator[_T]):
 
         return segments
 
-    def page(self, number: int | str) -> DatePage:
+    @override
+    def page(self, number: int | str) -> DatePage[_T]:
         number = self.validate_number(number)
         start_date, end_date = self.date_segments[number - 1]
 
@@ -124,12 +132,12 @@ class DatePaginator(Generic[_T], Paginator[_T]):
         return self._get_page(object_list, number, self, start_date, end_date)
 
     def _get_page_object_list_for_range(
-        self, start_date: datetime.datetime, end_date: datetime.datetime
+        self, start_date: datetime.date, end_date: datetime.date
     ) -> QuerySet[Any] | list[Any]:
         # to make mypy happy
-        object_list: QuerySet[Any] | list[Any]
+        object_list: QuerySet[Any] | list[_T]
 
-        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
+        if isinstance(self.object_list, QuerySet):
             if self.chronological:
                 filter_kwargs = {
                     f"{self.date_field}__gte": start_date,
@@ -179,7 +187,7 @@ class DatePaginator(Generic[_T], Paginator[_T]):
         if self.count == 1:
             return True
 
-        if isinstance(self.object_list, QuerySet):  # pyright: ignore[reportUnknownMemberType]
+        if isinstance(self.object_list, QuerySet):
             first_obj = self.object_list.first()
             last_obj = self.object_list.last()
         else:
@@ -191,7 +199,7 @@ class DatePaginator(Generic[_T], Paginator[_T]):
 
         return first_date < last_date
 
-    def _get_page(self, *args, **kwargs) -> DatePage:
+    def _get_page(self, *args: Any, **kwargs: Any) -> DatePage[_T]:
         return DatePage(*args, **kwargs)
 
     @cached_property
@@ -230,12 +238,12 @@ class DatePaginator(Generic[_T], Paginator[_T]):
                 )
 
 
-class DatePage(Page):
+class DatePage(Page[_T]):
     def __init__(
         self,
-        object_list: _SupportsPagination,
+        object_list: _SupportsPagination[_T],
         number: int,
-        paginator: DatePaginator,
+        paginator: DatePaginator[_T],
         start_date: datetime.datetime,
         end_date: datetime.datetime,
     ) -> None:
