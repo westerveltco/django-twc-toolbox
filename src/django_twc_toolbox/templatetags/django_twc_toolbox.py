@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 from django.db import models
 from django.utils.itercompat import is_iterable
 
-from django_twc_toolbox.decimal import format_decimal_places
+from django_twc_toolbox.numbers import format_number_no_round
 
 register = template.Library()
 
@@ -110,5 +110,7 @@ def startswith(text: str, starts: str) -> bool:
 
 
 @register.filter
-def decimal_places(number: float | int | str | Decimal, decimal_places: int = 2) -> str:
-    return str(format_decimal_places(number, decimal_places=decimal_places))
+def format_no_round(
+    number: float | int | str | Decimal, decimal_places: int = 2
+) -> str:
+    return str(format_number_no_round(number, decimal_places=decimal_places))
