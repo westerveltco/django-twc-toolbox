@@ -19,11 +19,9 @@ if TYPE_CHECKING:
     from typing import Any
 
     from django.core.paginator import _SupportsPagination
-    from django.db.models.fields import _ErrorMessagesDict
 
 
 _T = TypeVar("_T")
-_PaginatorKwargs = int | bool | _ErrorMessagesDict
 
 
 class DatePaginator(Generic[_T], Paginator[_T]):
