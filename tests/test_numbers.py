@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pytest
 
-from django_twc_toolbox.decimal import format_decimal_places
+from django_twc_toolbox.numbers import format_number_no_round
 
 
 @pytest.mark.parametrize(
@@ -28,8 +28,8 @@ from django_twc_toolbox.decimal import format_decimal_places
         (123.456789, 4, "123.456789"),
     ],
 )
-def test_format_decimal_places_float(number, decimal_places, expected):
-    result = format_decimal_places(number, decimal_places=decimal_places)
+def test_format_number_no_round_float(number, decimal_places, expected):
+    result = format_number_no_round(number, decimal_places=decimal_places)
 
     assert isinstance(result, str)
     assert result == expected
@@ -58,8 +58,8 @@ def test_format_decimal_places_float(number, decimal_places, expected):
         ("123.456789", 4, "123.456789"),
     ],
 )
-def test_format_decimal_places_str(number, decimal_places, expected):
-    result = format_decimal_places(number, decimal_places=decimal_places)
+def test_format_number_no_round_str(number, decimal_places, expected):
+    result = format_number_no_round(number, decimal_places=decimal_places)
 
     assert isinstance(result, str)
     assert result == expected
@@ -87,8 +87,8 @@ def test_format_decimal_places_str(number, decimal_places, expected):
         (Decimal("123.456789"), 4, Decimal("123.456789")),
     ],
 )
-def test_format_decimal_places_decimal(number, decimal_places, expected):
-    result = format_decimal_places(number, decimal_places=decimal_places)
+def test_format_number_no_round_decimal(number, decimal_places, expected):
+    result = format_number_no_round(number, decimal_places=decimal_places)
 
     assert isinstance(result, Decimal)
     assert result == expected
@@ -102,14 +102,14 @@ def test_format_decimal_places_decimal(number, decimal_places, expected):
         (7, "123.4567890"),
     ],
 )
-def test_format_decimal_places_arg(decimal_places, expected):
+def test_format_number_no_round_arg(decimal_places, expected):
     number = "123.456789"
 
-    result = format_decimal_places(number, decimal_places=decimal_places)
+    result = format_number_no_round(number, decimal_places=decimal_places)
 
     assert result == expected
 
 
-def test_format_decimal_places_invalid_input():
+def test_format_number_no_round_invalid_input():
     with pytest.raises(ValueError):
-        format_decimal_places("invalid", decimal_places=2)
+        format_number_no_round("invalid", decimal_places=2)
