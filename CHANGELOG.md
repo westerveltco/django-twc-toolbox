@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Bumped `django-twc-package` template version to v2024.22.
+
 ## [0.13.0]
 
 ### Added
