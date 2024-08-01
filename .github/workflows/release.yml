@@ -4,34 +4,12 @@ on:
   release:
     types: [released]
 
+permissions:
+  contents: write
+
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check most recent test run on `main`
-        id: latest-test-result
-        run: |
-          echo "result=$(gh run list \
-                          --branch=main \
-                          --workflow=test.yml \
-                          --json headBranch,workflowName,conclusion \
-                          --jq '.[] | select(.headBranch=="main" and .conclusion=="success") | .conclusion' \
-                          | head -n 1)" >> $GITHUB_OUTPUT
-
-      - name: OK
-        if: ${{ (contains(steps.latest-test-result.outputs.result, 'success')) }}
-        run: exit 0
-
-      - name: Fail
-        if: ${{ !contains(steps.latest-test-result.outputs.result, 'success') }}
-        run: exit 1
+  test:
+    uses: ./.github/workflows/test.yml
 
   pypi:
     if: ${{ github.event_name == 'release' }}
