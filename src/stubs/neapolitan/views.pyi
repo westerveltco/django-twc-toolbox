@@ -7,7 +7,6 @@ from collections.abc import Mapping
 from typing import ClassVar
 from typing import List
 from typing import TypeVar
-from typing import override
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
@@ -23,6 +22,8 @@ from django.utils.datastructures import MultiValueDict
 from django.utils.decorators import classonlymethod
 from django.utils.functional import classproperty
 from django.views.generic import View
+
+from django_twc_toolbox._typing import override
 
 class Role(enum.Enum):
     LIST = "list"
