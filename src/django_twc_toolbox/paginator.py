@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.utils.functional import cached_property
 
-from ._types import override
+from ._typing import override
 
 if TYPE_CHECKING:
     from typing import Any

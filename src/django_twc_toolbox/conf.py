@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from django.conf import settings
 
-from ._types import override
+from ._typing import override
 
 DJANGO_TWC_TOOLBOX_SETTINGS_NAME = "DJANGO_TWC_TOOLBOX"
 
