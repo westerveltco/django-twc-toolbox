@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.14.0]
+
 ### Added
 
 - Added `format_number_no_round` function to handle formatting of numbers with a specified number of decimal places while trimming excess trailing zeros or adding zeros as needed.
@@ -209,7 +211,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.13.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.14.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -229,3 +231,4 @@ Initial release!
 [0.12.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.0
 [0.12.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.1
 [0.13.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.13.0
+[0.14.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.14.0
