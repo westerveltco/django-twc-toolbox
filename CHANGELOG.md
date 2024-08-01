@@ -21,10 +21,11 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Added
 
 - Added `format_number_no_round` function to handle formatting of numbers with a specified number of decimal places while trimming excess trailing zeros or adding zeros as needed.
+- Support for Python 3.13.
 
 ### Changed
 
-- Bumped `django-twc-package` template version to v2024.22.
+- Bumped `django-twc-package` template version to v2024.24.
 
 ## [0.13.0]
 
