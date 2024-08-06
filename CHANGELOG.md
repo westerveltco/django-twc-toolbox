@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.15.0]
+
 ### Changed
 
 - Template partials are now behind a `CRUDView.enable_template_partials` flag. This is a breaking change as previously template partials were enabled by default. This has caused downstream issues when trying to adopt `CRUDView` on projects that use HTMX but have no partial template needs (at the moment).
@@ -215,7 +217,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.15.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -236,3 +238,4 @@ Initial release!
 [0.12.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.12.1
 [0.13.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.13.0
 [0.14.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.14.0
+[0.15.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.15.0
