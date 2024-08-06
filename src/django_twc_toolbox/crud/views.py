@@ -37,6 +37,9 @@ class CRUDView(NeapolitanCRUDView):
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
 
+    # disable template partials by default, for now
+    enable_template_partials: ClassVar[bool] = False
+
     # django-template-partials doesn't seem to be able to use a passed in context
     # variable to define partials, e.g. with `list_partial = "object-list"`
     # in the template context:
@@ -199,6 +202,15 @@ class CRUDView(NeapolitanCRUDView):
     @override
     def get_template_names(self):
         template_names = super().get_template_names()
+
+        # The logic below dealing with template partials was copied from a private
+        # project and enabled by default. This was fine for that project, but has been
+        # causing issues adopting `django_twc_project.crud.CRUDView` on some other projects.
+        # Enabling template partials by default was probably a *bit* premature, so this
+        # is now behind a flag to enable on a project-by-project basis until the kinks
+        # can be worked out.
+        if not self.enable_template_partials:
+            return template_names
 
         # only render the template partial if:
         # - it's the list view

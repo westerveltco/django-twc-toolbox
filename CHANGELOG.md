@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Template partials are now behind a `CRUDView.enable_template_partials` flag. This is a breaking change as previously template partials were enabled by default. This has caused downstream issues when trying to adopt `CRUDView` on projects that use HTMX but have no partial template needs (at the moment).
+
 ## [0.14.0]
 
 ### Added

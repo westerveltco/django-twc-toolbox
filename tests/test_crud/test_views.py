@@ -170,17 +170,23 @@ def test_get_context_data_table(klass, expected, rf, db):
 
 
 @pytest.mark.parametrize(
-    "htmx,expected",
+    "htmx,enable_template_partials,expected",
     [
-        (True, "neapolitan/object_list.html#object-list"),
-        (False, "neapolitan/object_list.html"),
+        (True, False, "neapolitan/object_list.html"),
+        (True, True, "neapolitan/object_list.html#object-list"),
+        (False, False, "neapolitan/object_list.html"),
+        (False, True, "neapolitan/object_list.html"),
     ],
 )
-def test_get_template_names(htmx, expected, rf):
+def test_get_template_names(htmx, enable_template_partials, expected, rf):
     request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
     request.htmx = htmx
 
-    view = BookmarkView(role=Role.LIST, **Role.LIST.extra_initkwargs())
+    view = BookmarkView(
+        role=Role.LIST,
+        enable_template_partials=enable_template_partials,
+        **Role.LIST.extra_initkwargs(),
+    )
     view.setup(request)
 
     template_names = view.get_template_names()
