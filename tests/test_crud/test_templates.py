@@ -32,7 +32,7 @@ def test_rendered_template_table(klass, expected, rf, db):
 
 
 def test_rendered_partial_template(rf, db):
-    view_func = BookmarkView.as_view(role=Role.LIST)
+    view_func = BookmarkView.as_view(role=Role.LIST, enable_template_partials=True)
     request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
     request.htmx = True
     baker.make(Bookmark, _quantity=3)
