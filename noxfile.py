@@ -115,4 +115,8 @@ def lint(session):
 @nox.session
 def mypy(session):
     session.install("django-twc-toolbox[dev] @ .")
-    session.run("python", "-m", "mypy", ".")
+
+    if session.posargs:
+        session.run("python", "-m", "mypy", ".", *session.posargs)
+    else:
+        session.run("python", "-m", "mypy", ".")

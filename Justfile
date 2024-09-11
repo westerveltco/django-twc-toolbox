@@ -30,8 +30,8 @@ testall *ARGS:
 coverage:
     python -m nox --session "coverage"
 
-types:
-    python -m nox --session "mypy"
+types *ARGS:
+    python -m nox --session "mypy" -- "{{ ARGS }}"
 
 # ----------------------------------------------------------------------
 # DJANGO

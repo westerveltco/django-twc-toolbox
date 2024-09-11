@@ -101,4 +101,4 @@ if find_spec("simple_history"):
 
         @_history_user.setter
         def _history_user(self, user: AbstractBaseUser) -> None:
-            self.changed_by = user
+            self.changed_by = user  # type: ignore[assignment]
