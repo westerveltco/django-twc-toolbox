@@ -21,6 +21,11 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 ### Added
 
 - A middleware `django_twc_toolbox.middleware.WwwRedirectMiddleware` for redirecting any request from a "www." subdomain to the bare domain. All credit to [Adam Johnson](https://github.com/adamchainz) -- [How to Make Django Redirect WWW to Your Bare Domain - Adam Johnson](https://adamj.eu/tech/2020/03/02/how-to-make-django-redirect-www-to-your-bare-domain/).
+- Now supporting Django 5.1.
+
+### Changed
+
+- Bumped `django-twc-package` template version to v2024.27.
 
 ### Fixed
 
