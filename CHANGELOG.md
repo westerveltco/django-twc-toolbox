@@ -22,6 +22,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - A middleware `django_twc_toolbox.middleware.WwwRedirectMiddleware` for redirecting any request from a "www." subdomain to the bare domain. All credit to [Adam Johnson](https://github.com/adamchainz) -- [How to Make Django Redirect WWW to Your Bare Domain - Adam Johnson](https://adamj.eu/tech/2020/03/02/how-to-make-django-redirect-www-to-your-bare-domain/).
 - Now supporting Django 5.1.
+- Added a `changed_by` field to `WithHistory` abstract model with a relation to a application's `User` model to track the source of the change through time. This will require a run of `makemigrations` and `migrate` on any model inheriting from `WithHistory`.
 
 ### Changed
 
