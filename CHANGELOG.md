@@ -22,6 +22,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 - A middleware `django_twc_toolbox.middleware.WwwRedirectMiddleware` for redirecting any request from a "www." subdomain to the bare domain. All credit to [Adam Johnson](https://github.com/adamchainz) -- [How to Make Django Redirect WWW to Your Bare Domain - Adam Johnson](https://adamj.eu/tech/2020/03/02/how-to-make-django-redirect-www-to-your-bare-domain/).
 
+### Fixed
+
+- The entirety of the `WithHistory` abstract model is now behind the check to see if django-simple-history is installed. Thanks to [@Tobi-De](https://github.com/Tobi-De) for the bug report ([#107](https://github.com/westerveltco/django-twc-toolbox/issues/107)).
+
 ## [0.15.0]
 
 ### Changed
