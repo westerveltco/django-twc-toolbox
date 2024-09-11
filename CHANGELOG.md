@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.16.0]
+
 ### Added
 
 - A middleware `django_twc_toolbox.middleware.WwwRedirectMiddleware` for redirecting any request from a "www." subdomain to the bare domain. All credit to [Adam Johnson](https://github.com/adamchainz) -- [How to Make Django Redirect WWW to Your Bare Domain - Adam Johnson](https://adamj.eu/tech/2020/03/02/how-to-make-django-redirect-www-to-your-bare-domain/).
@@ -231,7 +233,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.15.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.16.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -253,3 +255,4 @@ Initial release!
 [0.13.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.13.0
 [0.14.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.14.0
 [0.15.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.15.0
+[0.16.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.16.0
