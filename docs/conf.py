@@ -40,10 +40,10 @@ author = "Josh Thomas"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "autodoc2",
     "myst_parser",
     "sphinx_copybutton",
     "sphinx_inline_tabs",
-    "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
 ]
 
@@ -59,9 +59,13 @@ exclude_patterns = []
 # -- MyST configuration ------------------------------------------------------
 myst_heading_anchors = 3
 
+# -- Options for autodoc2 -----------------------------------------------------
+autodoc2_packages = [f"../src/{project.replace('-', '_')}"]
+autodoc2_render_plugin = "myst"
+
+# -- Options for sphinx_copybutton -----------------------------------------------------
 copybutton_selector = "div.copy pre"
 copybutton_prompt_text = "$ "
-
 
 # -- Options for HTML output -------------------------------------------------
 
