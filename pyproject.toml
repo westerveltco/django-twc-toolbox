@@ -171,8 +171,8 @@ module = ["charidfield.*", "cuid.*", "simple_history.*"]
 ignore_missing_model_attributes = true
 
 [tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
 addopts = "--create-db -n auto --dist loadfile --doctest-modules"
-django_find_project = false
 norecursedirs = ".* bin build dist *.egg htmlcov logs node_modules templates venv"
 python_files = "tests.py test_*.py *_tests.py"
 pythonpath = "src"

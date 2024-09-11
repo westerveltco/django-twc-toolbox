@@ -67,7 +67,7 @@ class Command(BaseCommand):
         # 5/ else inspect TEMPLATES[DIRS] setting and use first option if available
         else:
             try:
-                template_dir = Path(settings.TEMPLATES[0]["DIRS"][0])
+                template_dir = Path(settings.TEMPLATES[0]["DIRS"][0])  # type: ignore[index]
                 destination_path = template_dir / source
             except IndexError:
                 # 6/ otherwise create project level template directory and dump file there.
