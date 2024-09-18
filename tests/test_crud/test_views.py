@@ -452,3 +452,26 @@ def test_get_role_context_data_incorrect_return(role):
 
     with pytest.raises(ValueError):
         view.get_role_context_data({})
+
+
+@pytest.mark.parametrize(
+    "klass,quantity,paginate_by,expected",
+    [
+        (BookmarkView, 3, 1, 1),
+        (BookmarkTableView, 3, 1, 1),
+    ],
+)
+def test_list_pagination(klass, quantity, paginate_by, expected, rf, db):
+    baker.make(Bookmark, _quantity=quantity)
+
+    View = klass.as_view(role=Role.LIST).view_class
+    request = rf.get(Role.LIST.maybe_reverse(View))
+
+    view = View(paginate_by=paginate_by, role=Role.LIST, **Role.LIST.extra_initkwargs())
+    view.setup(request)
+
+    rendered = view.list(request=request)
+
+    object_list = rendered.context_data["object_list"]
+
+    assert len(object_list) == expected
