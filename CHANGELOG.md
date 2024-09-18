@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.17.0]
+
 ### Removed
 
 - Remove `WithHistory.changed_by`. This was introduced due to a misread of the django-simply-history documentation and is unneeded.
@@ -243,7 +245,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.16.1...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.17.0...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -267,3 +269,4 @@ Initial release!
 [0.15.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.15.0
 [0.16.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.16.0
 [0.16.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.16.1
+[0.17.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.17.0
