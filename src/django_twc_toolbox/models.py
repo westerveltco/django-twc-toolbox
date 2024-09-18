@@ -66,16 +66,12 @@ class TimeStamped(models.Model):
 
 
 if find_spec("simple_history"):
-    from django.contrib.auth import get_user_model
-    from django.contrib.auth.models import AbstractBaseUser
     from simple_history.models import HistoricalRecords
 
     class WithHistory(models.Model):
         """
         Abstract model for adding historical records to a model.
         """
-
-        changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
         history = HistoricalRecords(inherit=True)
 
@@ -94,11 +90,3 @@ if find_spec("simple_history"):
                 self.save(*args, **kwargs)
             finally:
                 del self.skip_history_when_saving
-
-        @property
-        def _history_user(self) -> AbstractBaseUser:
-            return self.changed_by
-
-        @_history_user.setter
-        def _history_user(self, user: AbstractBaseUser) -> None:
-            self.changed_by = user  # type: ignore[assignment]

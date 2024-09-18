@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Removed
+
+- Remove `WithHistory.changed_by`. This was introduced due to a misread of the django-simply-history documentation and is unneeded.
+
 ## [0.16.1]
 
 ### Fixed
