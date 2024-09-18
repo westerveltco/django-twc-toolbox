@@ -117,6 +117,10 @@ class CRUDView(NeapolitanCRUDView):
             )
         else:
             page = self.paginate_queryset(self.object_list, paginate_by)
+            # if we are not using django-tables2, make sure to set the `object_list` to
+            # the paginated list. this is how neapolitan expects pagination to work.
+            if self.table_class is None:
+                self.object_list = page.object_list
             context = self.get_context_data(
                 page_obj=page,
                 is_paginated=page.has_other_pages(),
