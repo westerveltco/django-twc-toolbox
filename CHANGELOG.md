@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Pagination in the `django_twc_toolbox.crud.views.CRUDView` list view now respects whether the view is using django-tables2 or the falling back to the default provided by neapolitan.
+
 ## [0.16.0]
 
 ### Added
