@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.17.1]
+
 ### Removed
 
 - Removed use of `django.utils.itercompat` from templatetags in favor of `isinstance` check.
@@ -249,7 +251,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.17.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.17.1...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -274,3 +276,4 @@ Initial release!
 [0.16.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.16.0
 [0.16.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.16.1
 [0.17.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.17.0
+[0.17.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.17.1
