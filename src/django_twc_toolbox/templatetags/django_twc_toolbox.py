@@ -10,7 +10,6 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.paginator import Page
 from django.core.paginator import Paginator
 from django.db import models
-from django.utils.itercompat import is_iterable
 
 from django_twc_toolbox.numbers import format_number_no_round
 
@@ -81,7 +80,7 @@ def query_string(context, query_dict=None, **kwargs):
         if value is None:
             if key in query_dict:
                 del query_dict[key]
-        elif is_iterable(value) and not isinstance(value, str):
+        elif isinstance(value, Iterable) and not isinstance(value, str):
             query_dict.setlist(key, value)
         else:
             query_dict[key] = value
