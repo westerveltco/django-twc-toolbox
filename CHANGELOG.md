@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Changed
+
+- Adjusted `object_list.html` template to be more in line with neapolitan's upstream template.
+
 ## [0.17.1]
 
 ### Removed
