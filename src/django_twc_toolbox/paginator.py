@@ -223,11 +223,11 @@ class DatePaginator(Generic[_T], Paginator[_T]):
             # For lists, check if elements are in ascending or descending order by date_field
             is_ascending = all(
                 getattr(x, self.date_field) <= getattr(y, self.date_field)
-                for x, y in zip(self.object_list, self.object_list[1:])
+                for x, y in zip(self.object_list, self.object_list[1:], strict=False)
             )
             is_descending = all(
                 getattr(x, self.date_field) >= getattr(y, self.date_field)
-                for x, y in zip(self.object_list, self.object_list[1:])
+                for x, y in zip(self.object_list, self.object_list[1:], strict=False)
             )
             if not (is_ascending or is_descending):
                 raise ValueError(

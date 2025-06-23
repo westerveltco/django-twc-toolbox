@@ -231,6 +231,7 @@ class CRUDView(NeapolitanCRUDView):
             and self.request.htmx
             and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
             and not self.request.GET.get(self.page_kwarg, None)
+            and template_names is not None
         ):
             template_names = [
                 f"{template_name}#{self.list_partial}"
