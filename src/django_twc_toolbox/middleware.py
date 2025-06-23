@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
