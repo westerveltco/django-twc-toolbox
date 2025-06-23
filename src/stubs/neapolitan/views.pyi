@@ -1,5 +1,6 @@
 # pyright: reportDeprecated=false
 # ruff: noqa: UP006
+import builtins
 import enum
 from collections.abc import Callable
 from collections.abc import Iterable
@@ -47,7 +48,7 @@ _TObject = object
 class CRUDView(View):
     role: Role
     model: ClassVar[type[models.Model] | None] = None
-    fields: ClassVar[list[str] | None] = None
+    fields: ClassVar[builtins.list[str] | None] = None
 
     lookup_field: ClassVar[str]
     lookup_url_kwarg: ClassVar[str | None] = None
@@ -109,7 +110,7 @@ class CRUDView(View):
     ) -> _TObject: ...  # TODO: change Any to FilterSet
     def get_context_object_name(self, is_list: bool = False) -> str | None: ...
     def get_context_data(self, **kwargs: _TObject) -> dict[str, _TObject]: ...
-    def get_template_names(self) -> list[str]: ...
+    def get_template_names(self) -> builtins.list[str]: ...
     def render_to_response(
         self, context: dict[str, _TObject] | None = None
     ) -> TemplateResponse: ...
@@ -121,4 +122,4 @@ class CRUDView(View):
     @classproperty
     def url_base(cls) -> str: ...
     @classonlymethod
-    def get_urls(cls, roles: list[Role] | None = None) -> list[URLPattern]: ...
+    def get_urls(cls, roles: builtins.list[Role] | None = None) -> builtins.list[URLPattern]: ...
