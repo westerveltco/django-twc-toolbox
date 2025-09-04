@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pytest
+from django import VERSION as DJANGO_VERSION
 from model_bakery import baker
 from neapolitan.views import Role
 
@@ -31,6 +32,10 @@ def test_rendered_template_table(klass, expected, rf, db):
     assert ("<h1>With Table</h1>" in content) is expected
 
 
+@pytest.mark.skipif(
+    DJANGO_VERSION > (5, 2),
+    reason="Django > 5.2 has built-in template partials that conflict with django-template-partials",
+)
 def test_rendered_partial_template(rf, db):
     view_func = BookmarkView.as_view(role=Role.LIST, enable_template_partials=True)
     request = rf.get(Role.LIST.maybe_reverse(BookmarkView))
@@ -45,6 +50,10 @@ def test_rendered_partial_template(rf, db):
     assert '<div class="sm:flex sm:items-center">' not in content
 
 
+@pytest.mark.skipif(
+    DJANGO_VERSION > (5, 2),
+    reason="Django > 5.2 has built-in template partials that conflict with django-template-partials",
+)
 @pytest.mark.xfail(
     reason="have not figured out how to dynamically change the partial name using `partialdef` templatetag"
 )
