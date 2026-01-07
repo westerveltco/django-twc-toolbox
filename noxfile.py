@@ -118,7 +118,7 @@ def coverage(session):
 @nox.session
 def lint(session):
     session.install("django-twc-toolbox[lint] @ .")
-    session.run("python", "-m", "pre_commit", "run", "--all-files")
+    session.run("uvx", "prek", "--all-files")
 
 
 @nox.session
