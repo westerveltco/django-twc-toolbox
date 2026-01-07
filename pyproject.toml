@@ -70,7 +70,7 @@ docs = [
   "sphinx-inline-tabs"
 ]
 history = ["django-simple-history"]
-lint = ["pre-commit"]
+lint = ["prek"]
 sentry = ["sentry-sdk[django]"]
 
 [project.urls]
