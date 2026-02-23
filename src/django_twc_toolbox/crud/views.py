@@ -12,6 +12,7 @@ from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django.utils.safestring import SafeString
 from django_htmx.middleware import HtmxDetails
 from django_tables2 import tables
 from django_tables2.views import SingleTableMixin
@@ -33,6 +34,8 @@ class CRUDView(NeapolitanCRUDView):
 
     detail_fields: ClassVar[list[str] | None] = None
     list_fields: ClassVar[list[str] | None] = None
+
+    detail_field_renderers: ClassVar[dict[str, Callable[..., str | SafeString]]] = {}
 
     table_class: ClassVar[type[tables.Table] | None] = None
     table_data: ClassVar[dict[str, object] | None] = None
