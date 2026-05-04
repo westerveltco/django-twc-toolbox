@@ -49,7 +49,16 @@ def object_detail(object: models.Model, view: CRUDView):
     def iter() -> Generator[tuple[str, str], None, None]:
         for f in fields:
             mf = object._meta.get_field(f)
-            yield (cast(str, mf.verbose_name), str(getattr(object, f)))  # type: ignore[union-attr]
+            rendered = str(getattr(object, f))
+
+            if renderer := view.detail_field_renderers.get(f):
+                if callable(renderer):
+                    rendered = renderer(field=mf, object=object)
+                else:
+                    msg = f"Field renderer for `{f}` should be a callable that returns a string"
+                    raise template.TemplateSyntaxError(msg)
+
+            yield (cast(str, mf.verbose_name), rendered)  # type: ignore[union-attr]
 
     return {"object": iter()}
 
