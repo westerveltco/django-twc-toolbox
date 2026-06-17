@@ -220,7 +220,15 @@ class CRUDView(NeapolitanCRUDView):
         # only render the template partial if:
         # - it's the list view
         # - it's an HTMX request
+        # - it's not an HTMX history-restore request
         # - it's not a paginated request
+        #
+        # On an htmx history-cache miss, htmx re-requests the URL with both
+        # `HX-Request: true` and `HX-History-Restore-Request: true`, then swaps the
+        # response into `<body>`. If we returned the bare `#object-list` partial here,
+        # the user would get a chrome-less, unstyled page (no `<head>`, CSS, etc.).
+        # So a history-restore request is treated like a non-htmx request and gets the
+        # full document template.
         #
         # Right now, our custom templates do not have support for rendering template partials when
         # dealing with paginated lists. We could probably update it to add an `hx-target` to the
@@ -229,6 +237,7 @@ class CRUDView(NeapolitanCRUDView):
             self.role == Role.LIST
             and getattr(self.request, "htmx", False)
             and self.request.htmx
+            and not getattr(self.request.htmx, "history_restore_request", False)
             and not self.kwargs.get(self.page_kwarg, None)  # pyright: ignore[reportAny]
             and not self.request.GET.get(self.page_kwarg, None)
             and template_names is not None

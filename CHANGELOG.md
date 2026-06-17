@@ -20,6 +20,7 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ### Fixed
 
+- `CRUDView.get_template_names` now returns the full document template instead of the `#object-list` partial on htmx history-restore requests (`HX-History-Restore-Request: true`), so the back button no longer renders a chrome-less, unstyled page on an htmx history-cache miss. ([#211](https://github.com/westerveltco/django-twc-toolbox/issues/211))
 - Silenced two mypy `[misc]` errors on `ReadOnlyStackedInline`/`ReadOnlyTabularInline` caused by a newer django-stubs changing the `InlineModelAdmin.get_readonly_fields` signature, which made it incompatible with the override in `ReadOnlyModelAdmin` across the two base classes.
 
 ## [0.18.0]
