@@ -42,13 +42,13 @@ class ReadOnlyModelAdmin(
         return False
 
 
-class ReadOnlyStackedInline(  # pyright: ignore[reportUnsafeMultipleInheritance]
+class ReadOnlyStackedInline(  # type: ignore[misc]  # pyright: ignore[reportUnsafeMultipleInheritance]
     ReadOnlyModelAdmin[ChildModelT, ParentModelT],
     admin.StackedInline[ChildModelT, ParentModelT],
 ): ...
 
 
-class ReadOnlyTabularInline(  # pyright: ignore[reportUnsafeMultipleInheritance]
+class ReadOnlyTabularInline(  # type: ignore[misc]  # pyright: ignore[reportUnsafeMultipleInheritance]
     ReadOnlyModelAdmin[ChildModelT, ParentModelT],
     admin.TabularInline[ChildModelT, ParentModelT],
 ): ...
