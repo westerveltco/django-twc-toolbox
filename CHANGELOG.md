@@ -18,6 +18,10 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Fixed
+
+- Silenced two mypy `[misc]` errors on `ReadOnlyStackedInline`/`ReadOnlyTabularInline` caused by a newer django-stubs changing the `InlineModelAdmin.get_readonly_fields` signature, which made it incompatible with the override in `ReadOnlyModelAdmin` across the two base classes.
+
 ## [0.18.0]
 
 ### Changed
