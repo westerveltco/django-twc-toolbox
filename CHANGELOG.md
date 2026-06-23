@@ -18,6 +18,8 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+## [0.18.1]
+
 ### Fixed
 
 - `CRUDView.get_template_names` now returns the full document template instead of the `#object-list` partial on htmx history-restore requests (`HX-History-Restore-Request: true`), so the back button no longer renders a chrome-less, unstyled page on an htmx history-cache miss. ([#211](https://github.com/westerveltco/django-twc-toolbox/issues/211))
@@ -262,7 +264,7 @@ Initial release!
 
 - Josh Thomas <josh@joshthomas.dev> (maintainer)
 
-[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.18.0...HEAD
+[unreleased]: https://github.com/westerveltco/django-twc-toolbox/compare/v0.18.1...HEAD
 [0.2.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.1
 [0.2.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.2.0
 [0.1.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.1.1
@@ -289,3 +291,4 @@ Initial release!
 [0.17.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.17.0
 [0.17.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.17.1
 [0.18.0]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.18.0
+[0.18.1]: https://github.com/westerveltco/django-twc-toolbox/releases/tag/v0.18.1
