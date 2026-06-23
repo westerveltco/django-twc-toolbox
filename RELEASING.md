@@ -12,6 +12,8 @@ When it comes time to cut a new release, follow these steps:
 
    However, the branch name is not *super* important, as long as it is not `main`.
 
+   The remaining instructions assume you have an activated virtual environment with the development dependencies installed (see [CONTRIBUTING.md](CONTRIBUTING.md#setup)).
+
 2. Update the version number across the project using the `bumpver` tool. See [this section](#choosing-the-next-version-number) for more details about choosing the correct version number.
 
    The `pyproject.toml` in the base of the repository contains a `[tool.bumpver]` section that configures the `bumpver` tool to update the version number wherever it needs to be updated and to create a commit with the appropriate commit message.
