@@ -1,5 +1,4 @@
 # pyright: reportDeprecated=false
-# ruff: noqa: UP006
 import builtins
 import enum
 from collections.abc import Callable
