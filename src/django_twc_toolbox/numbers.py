@@ -70,5 +70,4 @@ def format_number_no_round(number: T, *, decimal_places: int = 2) -> str | Decim
 
     if isinstance(number, (float | str)):
         return formatted_str
-    else:
-        return Decimal(formatted_str)
+    return Decimal(formatted_str)
