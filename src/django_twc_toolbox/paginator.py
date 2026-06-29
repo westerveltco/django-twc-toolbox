@@ -35,7 +35,7 @@ class DatePaginator(Generic[_T], Paginator[_T]):
         self.date_field = date_field
         self.page_date_range = page_date_range
 
-        if kwargs.get("orphans", None):
+        if kwargs.get("orphans"):
             warnings.warn(
                 "The `orphans` parameter is not applicable for DatePaginator and will be ignored.",
                 UserWarning,

@@ -55,7 +55,7 @@ class TimeStamped(models.Model):
         modified field is updated even if it is not given as
         a parameter to the update field argument.
         """
-        update_fields = kwargs.get("update_fields", None)
+        update_fields = kwargs.get("update_fields")
         if update_fields:
             kwargs["update_fields"] = set(update_fields).union({"updated_at"})
 

@@ -24,6 +24,7 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from shutil import copy2
 
@@ -32,13 +33,15 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template import loader
 
+logger = logging.getLogger(__name__)
+
 
 def get_template_absolute_path(template_path):
     try:
         template = loader.get_template(template_path)
         return template.origin.name  # type: ignore[attr-defined]
-    except Exception as e:
-        print(f"Error occurred while getting template path: {e}")
+    except Exception:
+        logger.exception("Error occurred while getting template path")
         return None
 
 
@@ -50,7 +53,6 @@ class Command(BaseCommand):
         parser.add_argument("destination", type=str, nargs="?")
 
     def handle(self, *args, **options):
-        print(options)
         # 1. extract the options
         source = options["source"]
         destination = options.get("destination")

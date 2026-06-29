@@ -13,8 +13,8 @@ from django_twc_toolbox.crud.views import CRUDView
 register = template.Library()
 
 
-def action_links(view: CRUDView, object: models.Model):
-    actions = {
+def action_links(view: CRUDView, object: models.Model):  # noqa: A002
+    return {
         "detail": {
             "url": Role.DETAIL.maybe_reverse(view, object),
             "text": "View",
@@ -28,11 +28,10 @@ def action_links(view: CRUDView, object: models.Model):
             "text": "Delete",
         },
     }
-    return actions
 
 
 @register.inclusion_tag("neapolitan/partial/detail.html")
-def object_detail(object: models.Model, view: CRUDView):
+def object_detail(object: models.Model, view: CRUDView):  # noqa: A002
     """
     Renders a detail view of an object with the given fields.
 
@@ -46,7 +45,7 @@ def object_detail(object: models.Model, view: CRUDView):
 
     fields = view.get_fields()
 
-    def iter() -> Generator[tuple[str, str], None, None]:
+    def iter() -> Generator[tuple[str, str], None, None]:  # noqa: A001
         for f in fields:
             mf = object._meta.get_field(f)
             yield (cast(str, mf.verbose_name), str(getattr(object, f)))  # type: ignore[union-attr]
@@ -75,7 +74,7 @@ def object_list(objects: Sequence[models.Model], view: CRUDView):
             "fields": [{"name": f, "value": str(getattr(object, f))} for f in fields],
             "actions": action_links(view, object),
         }
-        for object in objects
+        for object in objects  # noqa: A001
     ]
 
     return {
