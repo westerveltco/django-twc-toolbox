@@ -17,7 +17,7 @@
           {% for object in object_list %}
             <tr>
               {% for field in object.fields %}
-                <td class="py-3.5 px-3 {% if forloop.first %} font-medium text-gray-900 {% else %} text-gray-500 {% endif %} ">
+                <td class="py-3.5 px-3 {% if forloop.first %} font-medium text-gray-900 {% else %} text-gray-500 {% endif %}">
                   {{ field.value }}
                 </td>
               {% endfor %}
