@@ -18,6 +18,14 @@ and this project attempts to adhere to [Semantic Versioning](https://semver.org/
 
 ## [Unreleased]
 
+### Added
+
+- Added support for Python 3.14.
+
+### Fixed
+
+- Corrected the supported Django versions in the README, which still listed 4.2, 5.0, and 5.1 despite the package requiring `django>=5.2`.
+
 ## [0.18.1]
 
 ### Fixed
