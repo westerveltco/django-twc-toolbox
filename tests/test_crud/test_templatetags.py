@@ -35,6 +35,26 @@ def test_object_detail(db):
     assert detail_list[1][1] == getattr(object, view.detail_fields[1])
 
 
+def test_object_detail_with_renderer(db):
+    def render_url(**kwargs):
+        return "https://example.com"
+
+    class BookmarkDetailRendererView(BookmarkView):
+        detail_field_renderers = {
+            "url": render_url,
+        }
+
+    view = BookmarkDetailRendererView(role=Role.DETAIL)
+    object = baker.make(Bookmark)
+
+    detail = object_detail(object, view)
+    detail_list = list(detail["object"])
+
+    assert detail_list[0][0] == view.detail_fields[0]
+    assert detail_list[0][1] == "https://example.com"
+    assert detail_list[0][1] != getattr(object, view.detail_fields[0])
+
+
 def test_object_list(db):
     view = BookmarkView(role=Role.LIST)
     objects = baker.make(Bookmark, _quantity=5)
